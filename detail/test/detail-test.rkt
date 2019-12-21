@@ -14,7 +14,7 @@
     "test-add-rec"
 
     (detail 
-     '(console "test.txt")
+     '(console "test.pdf")
      (lambda ()
        (detail-title "Hello World!")
        
