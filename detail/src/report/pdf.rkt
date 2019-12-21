@@ -21,19 +21,25 @@
                      [as-eps #f]
                      [output pdf_file])))
         (lambda ()
-          (send dc set-font (make-font #:size 8))
           (send dc start-doc "")
-          (send dc start-page)
 
           (let loop ([loop_recs recs]
                      [loop_line 0])
             (when (not (null? loop_recs))
-              (send dc draw-text (DETAIL-REC-data (car loop_recs)) loop_line 0)
-              (loop (cdr loop_recs) (+ loop_line 10))))
+              (cond
+               [(eq? (DETAIL-REC-type (car loop_recs)) 'title)
+                (send dc set-font (make-font #:size 28))
+                (send dc draw-text (DETAIL-REC-data (car loop_recs)) 0 loop_line)
+                (send dc set-font (make-font #:size 14))]
+               [(eq? (DETAIL-REC-type (car loop_recs)) 'line)
+                (send dc draw-text (DETAIL-REC-data (car loop_recs)) 0 loop_line)]
+               [(eq? (DETAIL-REC-type (car loop_recs)) 'page-start)
+                (send dc start-page)
+                (send dc set-font (make-font #:size 14))]
+               [(eq? (DETAIL-REC-type (car loop_recs)) 'page-end)
+                (send dc flush)
+                (send dc end-page)])
+              (loop (cdr loop_recs) (+ loop_line 28))))
           )
         (lambda ()
-          (send dc end-page)
           (send dc end-doc)))))
-
-  
-

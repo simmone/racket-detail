@@ -7,9 +7,8 @@
           [detail (-> (or/c #f (listof (or/c 'console path-string?))) procedure? any)]
           [detail-add-rec (-> DETAIL-REC? void?)]
           [detail-title (-> string? void?)]
-          [detail-text (-> string? void?)]
-          [detail-section-start (-> void?)]
-          [detail-section-end (-> void?)]
+          [detail-line (-> string? void?)]
+          [detail-page (-> procedure? void?)]
           ))
 
 (define (detail detail_types proc)
@@ -19,8 +18,7 @@
                       #f)])
        (dynamic-wind
           (lambda () (void))
-          (lambda ()
-            (proc))
+          (lambda () (proc))
           (lambda ()
             (when (*detail*)
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-recs (*detail*))))))))
@@ -32,14 +30,13 @@
   (when (*detail*)
         (detail-add-rec (DETAIL-REC 'title title))))
 
-(define (detail-text text)
+(define (detail-line text)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'text text))))
+        (detail-add-rec (DETAIL-REC 'line text))))
 
-(define (detail-section-start)
+(define (detail-page proc)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'section-start ""))))
-
-(define (detail-section-end)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'section-end ""))))
+    (dynamic-wind
+        (lambda () (detail-add-rec (DETAIL-REC 'page-start "")))
+        (lambda () (proc))
+        (lambda () (detail-add-rec (DETAIL-REC 'page-end ""))))))

@@ -13,9 +13,9 @@
            (
             (type (or/c
                    'title
-                   'text
-                   'section-start
-                   'section-end
+                   'line
+                   'page-start
+                   'page-end
                    ))
             (data (or/c string?))
             )]

@@ -11,17 +11,25 @@
    "test-detail"
    
    (test-case
-    "test-add-rec"
+    "test-detail-line"
 
     (detail 
-     '(console "test.pdf")
+     '("test.pdf")
      (lambda ()
-       (detail-title "Hello World!")
-       
-       (let ([recs (DETAIL-recs (*detail*))])
-         (check-equal? (length recs) 1))
-      )))
+       (detail-page
+        (lambda ()
+          (let loop-text ([count 1])
+            (when (<= count 36)
+              (detail-line (number->string count))
+              (loop-text (add1 count))))))
 
+       (detail-page
+        (lambda ()
+          (let loop-text ([count 1])
+            (when (<= count 36)
+              (detail-line (number->string count))
+              (loop-text (add1 count))))))
+       )))
    ))
 
 (run-tests test-detail)
