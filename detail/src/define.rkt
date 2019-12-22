@@ -5,14 +5,16 @@
           [struct
            DETAIL
            (
-            (report (or/c #f (listof (or/c 'console path-string?))))
+            (report (or/c #f (listof (or/c 'raw 'console path-string?))))
             (recs (listof DETAIL-REC?))
             )]
           [struct
            DETAIL-REC
            (
             (type (or/c
-                   'title
+                   'h1
+                   'h2
+                   'h3
                    'line
                    'page-start
                    'page-end

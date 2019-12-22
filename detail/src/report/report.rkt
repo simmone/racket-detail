@@ -1,17 +1,20 @@
 #lang racket
 
 (require "../define.rkt")
+(require "raw.rkt")
 (require "console-txt.rkt")
 (require "pdf.rkt")
 
 (provide (contract-out
-          [detail-report (-> (listof (or/c 'console path-string?)) (listof DETAIL-REC?) void?)]
+          [detail-report (-> (listof (or/c 'raw 'console path-string?)) (listof DETAIL-REC?) void?)]
           ))
 
 (define (detail-report types recs)
   (let loop ([loop_types types])
     (when (not (null? loop_types))
       (cond
+       [(eq? (car loop_types) 'raw)
+        (detail-report-raw recs)]
        [(eq? (car loop_types) 'console)
         (detail-report-console recs)]
        [(regexp-match #rx"\\.txt$" (car loop_types))

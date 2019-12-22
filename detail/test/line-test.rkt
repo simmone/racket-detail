@@ -14,19 +14,19 @@
     "test-detail-line"
 
     (detail 
-     '("test.pdf")
+     '(console)
      (lambda ()
        (detail-page
         (lambda ()
           (let loop-text ([count 1])
-            (when (<= count 36)
+            (when (<= count 32)
               (detail-line (number->string count))
               (loop-text (add1 count))))))
 
        (detail-page
         (lambda ()
           (let loop-text ([count 1])
-            (when (<= count 36)
+            (when (<= count 32)
               (detail-line (number->string count))
               (loop-text (add1 count))))))
        )))

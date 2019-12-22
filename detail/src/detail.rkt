@@ -4,9 +4,11 @@
 (require "report/report.rkt")
 
 (provide (contract-out
-          [detail (-> (or/c #f (listof (or/c 'console path-string?))) procedure? any)]
+          [detail (-> (or/c #f (listof (or/c 'raw 'console path-string?))) procedure? any)]
           [detail-add-rec (-> DETAIL-REC? void?)]
-          [detail-title (-> string? void?)]
+          [detail-h1 (-> string? void?)]
+          [detail-h2 (-> string? void?)]
+          [detail-h3 (-> string? void?)]
           [detail-line (-> string? void?)]
           [detail-page (-> procedure? void?)]
           ))
@@ -26,9 +28,17 @@
 (define (detail-add-rec detail_rec)
   (set-DETAIL-recs! (*detail*) `(,@(DETAIL-recs (*detail*)) ,detail_rec)))
 
-(define (detail-title title)
+(define (detail-h1 h1)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'title title))))
+        (detail-add-rec (DETAIL-REC 'h1 h1))))
+
+(define (detail-h2 h2)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-REC 'h2 h2))))
+
+(define (detail-h3 h3)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-REC 'h3 h3))))
 
 (define (detail-line text)
   (when (*detail*)
