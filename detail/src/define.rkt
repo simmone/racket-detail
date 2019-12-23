@@ -26,6 +26,8 @@
 
 (define *detail* (make-parameter #f))
 
+(define ** (make-parameter #f))
+
 (struct
  DETAIL-REC
  (
