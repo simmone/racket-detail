@@ -14,7 +14,7 @@
     "test-detail-line"
 
     (detail 
-     '(console)
+     '(#f)
      (lambda ()
        (detail-page
         (lambda ()
