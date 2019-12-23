@@ -19,7 +19,8 @@
                    'page-start
                    'page-end
                    ))
-            (data (or/c string?))
+            (prefix string?)
+            (data string?)
             )]
           ))
 
@@ -29,6 +30,7 @@
  DETAIL-REC
  (
   [type #:mutable]
+  [prefix #:mutable]
   [data #:mutable]
   ))
 

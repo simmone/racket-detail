@@ -10,7 +10,12 @@
 (define (detail-report-console recs)
   (let loop ([loop_recs recs])
     (when (not (null? loop_recs))
-          (printf "~a\n" (DETAIL-REC-data (car loop_recs)))
+          (let ([rec (car loop_recs)])
+            (cond
+             [(eq? (DETAIL-REC-type rec) 'line)
+              (printf "~a: ~a\n" (DETAIL-REC-prefix rec) (DETAIL-REC-data rec))]
+             [else
+              (printf "~a\n" (DETAIL-REC-data (car loop_recs)))]))
           (loop (cdr loop_recs)))))
 
 (define (detail-report-txt txt_file recs)
