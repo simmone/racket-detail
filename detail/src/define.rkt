@@ -6,12 +6,12 @@
            DETAIL
            (
             (report (or/c #f (listof (or/c 'raw 'console path-string?))))
-            (recs (listof DETAIL-PAGE?))
+            (pages (listof DETAIL-PAGE?))
             )]
           [struct
            DETAIL-PAGE
            (
-            (prefix_length string?)
+            (prefix_length natural?)
             (recs (listof DETAIL-REC?))
             )]
           [struct

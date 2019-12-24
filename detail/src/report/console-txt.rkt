@@ -3,20 +3,25 @@
 (require "../define.rkt")
 
 (provide (contract-out
-          [detail-report-console (-> (listof DETAIL-REC?) void?)]
+          [detail-report-console (-> (listof DETAIL-PAGE?) void?)]
           [detail-report-txt (-> path-string? (listof DETAIL-PAGE?) void?)]
           ))
 
 (define (detail-report-console pages)
-  (let loop ([loop_pages pags])
+  (let loop-page ([loop_pages pages])
     (when (not (null? loop_pages))
-          (let ([page (car loop_pagess)])
-            (cond
-             [(eq? (DETAIL-REC-type rec) 'line)
-              (printf "~a: ~a\n" (DETAIL-REC-prefix rec) (DETAIL-REC-data rec))]
-             [else
-              (printf "~a\n" (DETAIL-REC-data (car loop_recs)))]))
-          (loop (cdr loop_recs)))))
+          (let* ([page (car loop_pages)]
+                 [prefix_length (DETAIL-PAGE-prefix_length page)])
+            (let loop-rec ([recs (DETAIL-PAGE-recs page)])
+              (when (not (null? recs))
+                    (let ([rec (car recs)])
+                      (cond
+                       [(eq? (DETAIL-REC-type rec) 'line)
+                        (printf "~a: ~a\n" (~a #:min-width 5 #:pad-string " " #:align 'right (DETAIL-REC-prefix rec)) (DETAIL-REC-data rec))]
+                       [else
+                        (printf "~a: ~a\n" (~a #:min-width 5 #:pad-string " " #:align 'right (DETAIL-REC-prefix rec)) (DETAIL-REC-data rec))])
+                      (loop-rec (cdr recs))))))
+          (loop-page (cdr loop_pages)))))
 
 (define (detail-report-txt txt_file recs)
   (with-output-to-file txt_file

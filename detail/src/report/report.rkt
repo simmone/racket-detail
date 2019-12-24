@@ -6,7 +6,7 @@
 (require "pdf.rkt")
 
 (provide (contract-out
-          [detail-report (-> (listof (or/c 'raw 'console path-string?)) (listof DETAIL-REC?) void?)]
+          [detail-report (-> (listof (or/c 'raw 'console path-string?)) (listof DETAIL-PAGE?) void?)]
           ))
 
 (define (detail-report types recs)

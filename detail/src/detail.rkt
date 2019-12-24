@@ -26,7 +26,7 @@
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
 
 (define (detail-add-rec detail_rec)
-  (set-DETAIL-recs! (*current_page*) `(,@(DETAIL-recs (*current_page*)) ,detail_rec)))
+  (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,detail_rec)))
 
 (define (detail-h1 h1)
   (when (*detail*)
@@ -55,4 +55,4 @@
              (lambda () (proc))
              (lambda ()
                (detail-add-rec (DETAIL-REC 'page-end "" ""))
-               (set-DETAIL-pages! (*detail*) (*current_page*)))))))
+               (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))))
