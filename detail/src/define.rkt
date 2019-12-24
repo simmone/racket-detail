@@ -6,6 +6,12 @@
            DETAIL
            (
             (report (or/c #f (listof (or/c 'raw 'console path-string?))))
+            (recs (listof DETAIL-PAGE?))
+            )]
+          [struct
+           DETAIL-PAGE
+           (
+            (prefix_length string?)
             (recs (listof DETAIL-REC?))
             )]
           [struct
@@ -26,7 +32,19 @@
 
 (define *detail* (make-parameter #f))
 
-(define ** (make-parameter #f))
+(struct
+ DETAIL
+ (
+  [report #:mutable]
+  [pages #:mutable]
+  ))
+
+(struct
+ DETAIL-PAGE
+ (
+  [prefix_length #:mutable]
+  [recs #:mutable]
+  ))
 
 (struct
  DETAIL-REC
@@ -34,12 +52,5 @@
   [type #:mutable]
   [prefix #:mutable]
   [data #:mutable]
-  ))
-
-(struct
- DETAIL
- (
-  [report #:mutable]
-  [recs #:mutable]
   ))
 

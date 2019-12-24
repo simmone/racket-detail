@@ -26,7 +26,7 @@
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-recs (*detail*))))))))
 
 (define (detail-add-rec detail_rec)
-  (set-DETAIL-recs! (*detail*) `(,@(DETAIL-recs (*detail*)) ,detail_rec)))
+  (set-DETAIL-recs! (*current_page*) `(,@(DETAIL-recs (*current_page*)) ,detail_rec)))
 
 (define (detail-h1 h1)
   (when (*detail*)
@@ -44,9 +44,15 @@
   (when (*detail*)
         (detail-add-rec (DETAIL-REC 'line prefix val))))
 
+(define *current_page* (make-parameter #f))
+
 (define (detail-page proc)
   (when (*detail*)
-    (dynamic-wind
-        (lambda () (detail-add-rec (DETAIL-REC 'page-start "" "")))
-        (lambda () (proc))
-        (lambda () (detail-add-rec (DETAIL-REC 'page-end "" ""))))))
+        (parameterize
+         ([*current_page* (DETAIL-PAGE 0 '())])
+         (dynamic-wind
+             (lambda () (detail-add-rec (DETAIL-REC 'page-start "" "")))
+             (lambda () (proc))
+             (lambda ()
+               (detail-add-rec (DETAIL-REC 'page-end "" ""))
+               (set-DETAIL-pages! (*detail*) (*current_page*)))))))
