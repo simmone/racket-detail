@@ -23,7 +23,7 @@
           (lambda () (proc))
           (lambda ()
             (when (*detail*)
-                  (detail-report (DETAIL-report (*detail*)) (DETAIL-recs (*detail*))))))))
+                  (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
 
 (define (detail-add-rec detail_rec)
   (set-DETAIL-recs! (*current_page*) `(,@(DETAIL-recs (*current_page*)) ,detail_rec)))

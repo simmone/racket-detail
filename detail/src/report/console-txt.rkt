@@ -4,13 +4,13 @@
 
 (provide (contract-out
           [detail-report-console (-> (listof DETAIL-REC?) void?)]
-          [detail-report-txt (-> path-string? (listof DETAIL-REC?) void?)]
+          [detail-report-txt (-> path-string? (listof DETAIL-PAGE?) void?)]
           ))
 
-(define (detail-report-console recs)
-  (let loop ([loop_recs recs])
-    (when (not (null? loop_recs))
-          (let ([rec (car loop_recs)])
+(define (detail-report-console pages)
+  (let loop ([loop_pages pags])
+    (when (not (null? loop_pages))
+          (let ([page (car loop_pagess)])
             (cond
              [(eq? (DETAIL-REC-type rec) 'line)
               (printf "~a: ~a\n" (DETAIL-REC-prefix rec) (DETAIL-REC-data rec))]
