@@ -19,17 +19,16 @@
                      [width 595]
                      [height 842]
                      [as-eps #f]
-                     [output pdf_file])))
-        (lambda ()
+                     [output pdf_file]))
           (send dc start-doc "")
-
+          (send dc set-font (make-font #:size 14)))
+        (lambda ()
           (let loop-page ([loop_pages pages])
             (when (not (null? loop_pages))
                   (let* ([page (car loop_pages)]
                          [prefix_length (DETAIL-PAGE-prefix_length page)])
 
                     (send dc start-page)
-                    (send dc set-font (make-font #:size 14))
 
                     (let loop-rec ([recs (DETAIL-PAGE-recs page)]
                                    [loop_line 0])
