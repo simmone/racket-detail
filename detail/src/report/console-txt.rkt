@@ -14,13 +14,18 @@
                  [prefix_length (DETAIL-PAGE-prefix_length page)])
             (let loop-rec ([recs (DETAIL-PAGE-recs page)])
               (when (not (null? recs))
-                    (let ([rec (car recs)])
+                    (let* ([rec (car recs)]
+                           [type (DETAIL-REC-type rec)]
+                           [prefix (DETAIL-REC-prefix rec)]
+                           [data (DETAIL-REC-data rec)])
                       (cond
-                       [(eq? (DETAIL-REC-type rec) 'line)
-                        (printf "~a: ~a\n" (~a #:min-width 5 #:pad-string " " #:align 'right (DETAIL-REC-prefix rec)) (DETAIL-REC-data rec))]
+                       [(eq? type 'line)
+                        (if (string=? data "")
+                            (printf "\n")
+                            (printf "~a: ~a\n" (~a #:min-width 5 #:pad-string " " #:align 'right prefix) data))]
                        [else
-                        (printf "~a: ~a\n" (~a #:min-width 5 #:pad-string " " #:align 'right (DETAIL-REC-prefix rec)) (DETAIL-REC-data rec))])
-                      (loop-rec (cdr recs))))))
+                            (printf "~a\n" data)]))
+                      (loop-rec (cdr recs)))))
           (loop-page (cdr loop_pages)))))
 
 (define (detail-report-txt txt_file recs)
