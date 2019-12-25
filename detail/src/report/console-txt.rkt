@@ -10,6 +10,7 @@
 (define (detail-report-console pages)
   (let loop-page ([loop_pages pages])
     (when (not (null? loop_pages))
+          (printf "----\n")
           (let* ([page (car loop_pages)]
                  [prefix_length (DETAIL-PAGE-prefix_length page)])
             (let loop-rec ([recs (DETAIL-PAGE-recs page)])
@@ -24,8 +25,9 @@
                             (printf "\n")
                             (printf "~a: ~a\n" (~a #:min-width prefix_length #:pad-string " " #:align 'right prefix) data))]
                        [else
-                            (printf "~a\n" data)]))
+                            (printf "~a\n\n" data)]))
                       (loop-rec (cdr recs)))))
+          (printf "----\n")
           (loop-page (cdr loop_pages)))))
 
 (define (detail-report-txt txt_file recs)
