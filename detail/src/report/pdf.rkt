@@ -27,6 +27,10 @@
             (when (not (null? loop_pages))
                   (let* ([page (car loop_pages)]
                          [prefix_length (DETAIL-PAGE-prefix_length page)])
+
+                    (send dc start-page)
+                    (send dc set-font (make-font #:size 14))
+
                     (let loop-rec ([recs (DETAIL-PAGE-recs page)]
                                    [loop_line 0])
                       (when (not (null? recs))
@@ -55,14 +59,8 @@
                                     (send dc draw-text data 0 "\n")
                                     (send dc draw-text data 0
                                           (format "~a: ~a\n" (~a #:min-width prefix_length #:pad-string " " #:align 'right prefix) data)))
-                                (loop-rec (cdr recs) (+ loop_line 32))]
-                               [(eq? type 'page-start)
-                                (send dc start-page)
-                                (send dc set-font (make-font #:size 14))
-                                (loop-rec (cdr recs) 0)]
-                               [(eq? type 'page-end)
-                                (send dc end-page)
-                                (loop-rec (cdr recs) 0)])))))
-                  (loop-page (cdr loop_pages)))))
+                                (loop-rec (cdr recs) (+ loop_line 32))]))))
+                    (send dc end-page)
+                    (loop-page (cdr loop_pages))))))
         (lambda ()
           (send dc end-doc)))))

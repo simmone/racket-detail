@@ -26,6 +26,8 @@
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
 
 (define (detail-add-rec detail_rec)
+  (when (> (string-length (DETAIL-REC-prefix detail_rec)) (DETAIL-PAGE-prefix_length (*current_page*)))
+        (set-DETAIL-PAGE-prefix_length! (*current_page*) (string-length (DETAIL-REC-prefix detail_rec))))
   (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,detail_rec)))
 
 (define (detail-h1 h1)
@@ -51,8 +53,7 @@
         (parameterize
          ([*current_page* (DETAIL-PAGE 0 '())])
          (dynamic-wind
-             (lambda () (detail-add-rec (DETAIL-REC 'page-start "" "")))
+             (lambda () (void))
              (lambda () (proc))
              (lambda ()
-               (detail-add-rec (DETAIL-REC 'page-end "" ""))
                (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))))

@@ -22,7 +22,7 @@
                        [(eq? type 'line)
                         (if (string=? data "")
                             (printf "\n")
-                            (printf "~a: ~a\n" (~a #:min-width 5 #:pad-string " " #:align 'right prefix) data))]
+                            (printf "~a: ~a\n" (~a #:min-width prefix_length #:pad-string " " #:align 'right prefix) data))]
                        [else
                             (printf "~a\n" data)]))
                       (loop-rec (cdr recs)))))
