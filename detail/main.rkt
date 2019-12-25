@@ -9,6 +9,6 @@
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
-          [detail-line (-> string? void?)]
+          [detail-line (-> string? string? void?)]
           [detail-page (-> procedure? void?)]
           ))

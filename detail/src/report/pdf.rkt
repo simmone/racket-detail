@@ -59,7 +59,7 @@
                                           (send dc draw-text "\n" 0 loop_line)
                                           (begin
                                             (send dc draw-text (format "~a\n" (~a #:min-width prefix_length #:pad-string " " #:align 'right prefix)) 0 loop_line)
-                                            (send dc draw-text (format ": ~a" data) (* prefix_length 10) (+ loop_line 3))))
+                                            (send dc draw-text (format ": ~a" data) (* prefix_length 8) (+ loop_line 3))))
                                       (loop-rec (cdr recs) (+ loop_line 32))])))))
                         (lambda () (send dc end-page))))
                     (loop-page (cdr loop_pages)))))
