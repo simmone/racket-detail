@@ -11,14 +11,20 @@
     (when (not (null? loop_pages))
           (let* ([page (car loop_pages)]
                  [prefix_length (DETAIL-PAGE-prefix_length page)])
-            (printf "prefix_length: ~a\n" prefix_length)
             (let loop-rec ([recs (DETAIL-PAGE-recs page)])
               (when (not (null? recs))
-                    (let* ([rec (car recs)]
-                           [type (DETAIL-REC-type rec)]
-                           [prefix (DETAIL-REC-prefix rec)]
-                           [data (DETAIL-REC-data rec)])
-                      (printf "[~a][~a][~a]\n" type prefix data))
+                    (let ([rec (car recs)])
+                      (cond
+                       [(DETAIL-TITLE? rec)
+                        (printf "DETAIL-TITLE:[~a][~a]\n" (DETAIL-TITLE-level rec) (DETAIL-TITLE-data rec))]
+                       [(DETAIL-LINE? rec)
+                        (printf "DETAIL-LINE:[~a]\n" (DETAIL-LINE-data rec))]
+                       [(DETAIL-PREFIX-LINE? rec)
+                        (printf "DETAIL-PREFIX-LINE:[~a][~a][~a]\n"
+                                prefix_length
+                                (DETAIL-PREFIX-LINE-prefix rec)
+                                (DETAIL-PREFIX-LINE-data rec))]
+                       ))
                     (loop-rec (cdr recs)))))
           (loop-page (cdr loop_pages)))))
 

@@ -33,23 +33,23 @@
 
 (define (detail-h1 h1)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'h1 "" h1))))
+        (detail-add-rec (DETAIL-TITLE 'h1 h1))))
 
 (define (detail-h2 h2)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'h2 "" h2))))
+        (detail-add-rec (DETAIL-TITLE 'h2 h2))))
 
 (define (detail-h3 h3)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'h3 "" h3))))
+        (detail-add-rec (DETAIL-TITLE 'h3 h3))))
 
 (define (detail-prefix-line prefix val)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'prefix_line prefix val))))
+        (detail-add-rec (DETAIL-PREFIX-LINE prefix val))))
 
 (define (detail-line val)
   (when (*detail*)
-        (detail-add-rec (DETAIL-REC 'line prefix val))))
+        (detail-add-rec (DETAIL-LINE val))))
 
 (define *current_page* (make-parameter #f))
 

@@ -15,10 +15,19 @@
                  [prefix_length (DETAIL-PAGE-prefix_length page)])
             (let loop-rec ([recs (DETAIL-PAGE-recs page)])
               (when (not (null? recs))
-                    (let* ([rec (car recs)]
-                           [type (DETAIL-REC-type rec)]
-                           [prefix (DETAIL-REC-prefix rec)]
-                           [data (DETAIL-REC-data rec)])
+                    (let ([rec (car recs)])
+                      (cond
+                       [(DETAIL-TITLE? rec)
+                        (printf "~a\n\n" data)]
+                       [(DETAIL-LINE? rec)
+                        (printf "~a\n\n" data)]))
+                        (printf "DETAIL-LINE:[~a]\n" (DETAIL-LINE-data rec))]
+                       [(DETAIL-PREFIX-LINE? rec)
+                        (printf "DETAIL-PREFIX-LINE:[~a][~a][~a]\n"
+                                prefix_length
+                                (DETAIL-PREFIX-LINE-prefix rec)
+                                (DETAIL-PREFIX-LINE-data rec))]
+                       ))
                       (cond
                        [(eq? type 'line)
                         (if (string=? data "")
