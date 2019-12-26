@@ -12,22 +12,22 @@
            DETAIL-PAGE
            (
             (prefix_length natural?)
-            (recs (listof DETAIL-REC?))
+            (recs (listof DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?))
             )]
-          [struct
-           DETAIL-REC
-           (
-            (type (or/c
-                   'h1
-                   'h2
-                   'h3
-                   'line
-                   'page-start
-                   'page-end
-                   ))
-            (prefix string?)
-            (data string?)
-            )]
+          [struct DETAIL-TITLE
+                  (
+                   (level (listof 'h1 'h2 'h3))
+                   (data string?)
+                   )]
+          [struct DETAIL-LINE
+                  (
+                   (data string?)
+                   )]
+          [struct DETAIL-PREFIX-LINE
+                  (
+                   (prefix string?)
+                   (data string?)
+                   )]
           ))
 
 (define *detail* (make-parameter #f))
@@ -47,10 +47,21 @@
   ))
 
 (struct
- DETAIL-REC
+ DETAIL-TITLE
  (
-  [type #:mutable]
-  [prefix #:mutable]
+  [level #:mutable]
   [data #:mutable]
   ))
 
+(struct
+ DETAIL-LINE
+ (
+  [data #:mutable]
+  ))
+
+(struct
+ DETAIL-PREFIX-LINE
+ (
+  [prefix #:mutable]
+  [data #:mutable]
+  ))

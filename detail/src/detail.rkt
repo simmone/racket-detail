@@ -9,7 +9,8 @@
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
-          [detail-line (-> string? string? void?)]
+          [detail-line (-> string? void?)]
+          [detail-prefix-line (-> string? string? void?)]
           [detail-page (-> procedure? void?)]
           ))
 
@@ -42,7 +43,11 @@
   (when (*detail*)
         (detail-add-rec (DETAIL-REC 'h3 "" h3))))
 
-(define (detail-line prefix val)
+(define (detail-prefix-line prefix val)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-REC 'prefix_line prefix val))))
+
+(define (detail-line val)
   (when (*detail*)
         (detail-add-rec (DETAIL-REC 'line prefix val))))
 
