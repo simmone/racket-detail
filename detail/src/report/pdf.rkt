@@ -58,7 +58,8 @@
                                       (loop-rec (cdr recs) (+ loop_line 32))]
                                      [(DETAIL-PREFIX-LINE? rec)
                                       (send dc draw-text
-                                            (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec)) 0 loop_line)
+                                            (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec))
+                                            0 loop_line)
                                       (send dc draw-text (DETAIL-PREFIX-LINE-data rec) (* prefix_length 8) loop_line)
                                       (loop-rec (cdr recs) (+ loop_line 32))])))))
                         (lambda () (send dc end-page))))

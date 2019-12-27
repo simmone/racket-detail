@@ -11,6 +11,7 @@
     (when (not (null? loop_pages))
           (let* ([page (car loop_pages)]
                  [prefix_length (DETAIL-PAGE-prefix_length page)])
+            (printf "PAGE-START\n")
             (let loop-rec ([recs (DETAIL-PAGE-recs page)])
               (when (not (null? recs))
                     (let ([rec (car recs)])
@@ -25,7 +26,8 @@
                                 (DETAIL-PREFIX-LINE-prefix rec)
                                 (DETAIL-PREFIX-LINE-data rec))]
                        ))
-                    (loop-rec (cdr recs)))))
+                    (loop-rec (cdr recs))))
+            (printf "PAGE-END\n"))
           (loop-page (cdr loop_pages)))))
 
   

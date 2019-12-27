@@ -14,20 +14,20 @@
     "test-detail-line"
 
     (detail 
-     '(raw)
+     '(console)
      (lambda ()
        (detail-page
         (lambda ()
           (let loop-text ([count 1])
             (when (<= count 32)
-              (detail-prefix-line (number->string (random 100000)) (number->string count))
+              (detail-prefix-line (string-append (number->string (random 100000)) ": ") (number->string count))
               (loop-text (add1 count))))))
 
        (detail-page
         (lambda ()
           (let loop-text ([count 1])
             (when (<= count 32)
-              (detail-prefix-line (number->string (random 100000)) (number->string count))
+              (detail-prefix-line (string-append (number->string (random 100000)) ": ") (number->string count))
               (loop-text (add1 count))))))
        )))
    ))
