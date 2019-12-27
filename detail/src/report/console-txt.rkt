@@ -18,23 +18,13 @@
                     (let ([rec (car recs)])
                       (cond
                        [(DETAIL-TITLE? rec)
-                        (printf "~a\n\n" data)]
+                        (printf "~a\n\n" (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
-                        (printf "~a\n\n" data)]))
-                        (printf "DETAIL-LINE:[~a]\n" (DETAIL-LINE-data rec))]
+                        (printf "~a\n" (DETAIL-LINE-data rec))]
                        [(DETAIL-PREFIX-LINE? rec)
-                        (printf "DETAIL-PREFIX-LINE:[~a][~a][~a]\n"
-                                prefix_length
-                                (DETAIL-PREFIX-LINE-prefix rec)
-                                (DETAIL-PREFIX-LINE-data rec))]
-                       ))
-                      (cond
-                       [(eq? type 'line)
-                        (if (string=? data "")
-                            (printf "\n")
-                            (printf "~a: ~a\n" (~a #:min-width prefix_length #:pad-string " " #:align 'right prefix) data))]
-                       [else
-                            (printf "~a\n\n" data)]))
+                        (printf "~a~a\n"
+                                (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec))
+                                (DETAIL-PREFIX-LINE-data rec))]))
                       (loop-rec (cdr recs)))))
           (printf "----\n")
           (loop-page (cdr loop_pages)))))
