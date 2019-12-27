@@ -12,11 +12,11 @@
            DETAIL-PAGE
            (
             (prefix_length natural?)
-            (recs (listof DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?))
+            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?)))
             )]
           [struct DETAIL-TITLE
                   (
-                   (level (listof 'h1 'h2 'h3))
+                   (level (or/c 'h1 'h2 'h3))
                    (data string?)
                    )]
           [struct DETAIL-LINE

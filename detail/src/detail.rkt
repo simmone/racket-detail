@@ -5,7 +5,7 @@
 
 (provide (contract-out
           [detail (-> (or/c #f (listof (or/c 'raw 'console path-string?))) procedure? any)]
-          [detail-add-rec (-> DETAIL-REC? void?)]
+          [detail-add-rec (-> (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?) void?)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
@@ -27,8 +27,10 @@
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
 
 (define (detail-add-rec detail_rec)
-  (when (> (string-length (DETAIL-REC-prefix detail_rec)) (DETAIL-PAGE-prefix_length (*current_page*)))
-        (set-DETAIL-PAGE-prefix_length! (*current_page*) (string-length (DETAIL-REC-prefix detail_rec))))
+  (when (and
+         (DETAIL-PREFIX-LINE? detail_rec)
+         (> (string-length (DETAIL-PREFIX-LINE-prefix detail_rec)) (DETAIL-PAGE-prefix_length (*current_page*))))
+        (set-DETAIL-PAGE-prefix_length! (*current_page*) (string-length (DETAIL-PREFIX-LINE-prefix detail_rec))))
   (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,detail_rec)))
 
 (define (detail-h1 h1)
