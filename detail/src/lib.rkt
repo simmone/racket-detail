@@ -1,9 +1,23 @@
 #lang racket
 
 (provide (contract-out
+          [zip-string (-> string? (and/c natural? (>/c 0)) (listof string?))]
           [display-double-list (->* (list? list?) (natural? natural?) string?)]
           [display-list (->* (list?) (natural? natural?) string?)]
           ))
+
+(define (zip-string str line_count)
+  (let loop ([chs (string->list str)]
+             [str_list '()]
+             [result_list '()]
+             [count 0])
+    (if (not (null? chs))
+        (if (< count line_count)
+            (loop (cdr chs) (cons (car chs) str_list) result_list (add1 count))
+            (loop (cdr chs) (list (car chs)) (cons (list->string (reverse str_list)) result_list) 1))
+        (if (null? str_list)
+            (reverse result_list)
+            (reverse (cons (list->string (reverse str_list)) result_list))))))
 
 (define (display-double-list input_list result_list [col_width 12] [line_count 10])
   (if (and
