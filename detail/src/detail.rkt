@@ -4,7 +4,7 @@
 (require "report/report.rkt")
 
 (provide (contract-out
-          [detail (-> (or/c #f (listof (or/c 'raw 'console path-string?))) procedure? any)]
+          [detail (-> (or/c #f (listof (or/c 'raw 'console path-string?))) any/c procedure? any)]
           [detail-add-rec (-> (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?) void?)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
@@ -14,14 +14,21 @@
           [detail-page (-> procedure? void?)]
           ))
 
-(define (detail detail_types proc)
+(define (detail detail_types exception_value proc)
   (parameterize ([*detail*
                   (if detail_types
                       (DETAIL detail_types '())
                       #f)])
        (dynamic-wind
           (lambda () (void))
-          (lambda () (proc))
+          (lambda ()
+            (with-handlers ([exn:fail?
+                             (lambda (e)
+                               (DETAIL-LINE (exn-message e))
+                               (printf "~a\n" e)
+                               (when (*detail*) (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))
+                               exception_value)])
+                           (proc)))
           (lambda ()
             (when (*detail*)
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
@@ -56,11 +63,12 @@
 (define *current_page* (make-parameter #f))
 
 (define (detail-page proc)
-  (when (*detail*)
-        (parameterize
-         ([*current_page* (DETAIL-PAGE 0 '())])
-         (dynamic-wind
-             (lambda () (void))
-             (lambda () (proc))
-             (lambda ()
-               (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))))
+  (if (*detail*)
+      (parameterize
+          ([*current_page* (DETAIL-PAGE 0 '())])
+        (dynamic-wind
+            (lambda () (void))
+            (lambda () (proc))
+            (lambda ()
+              (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
+      (proc)))

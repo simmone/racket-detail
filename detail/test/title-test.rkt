@@ -15,6 +15,7 @@
 
     (detail 
      '(console "title.pdf")
+     void
      (lambda ()
        (detail-page
         (lambda ()
