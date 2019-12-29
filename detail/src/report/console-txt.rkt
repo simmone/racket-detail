@@ -21,13 +21,13 @@
                        [(DETAIL-TITLE? rec)
                         (printf "~a\n\n" (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
-                        (let loop ([strs (zip-string (DETAIL-LINE-data rec) (*line_break_length*))])
+                        (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))])
                           (when (not (null? strs))
                             (printf "~a\n" (car strs))
                             (loop (cdr strs))))]
                        [(DETAIL-PREFIX-LINE? rec)
                         (printf (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec)))
-                        (let loop ([strs (zip-string (DETAIL-PREFIX-LINE-data rec) (*line_break_length*))]
+                        (let loop ([strs (zip-string (DETAIL-PREFIX-LINE-data rec) (DETAIL-PREFIX-LINE-line_break_length rec))]
                                    [line_no 1])
                           (when (not (null? strs))
                             (if (= line_no 1)
@@ -36,7 +36,7 @@
                                         (~a #:min-width prefix_length #:pad-string " ")
                                         (car strs)))
                             (loop (cdr strs) (add1 line_no))))]))
-                      (loop-rec (cdr recs)))))
+                    (loop-rec (cdr recs)))))
           (printf "----\n")
           (loop-page (cdr loop_pages)))))
 
@@ -45,6 +45,3 @@
     #:exists 'replace
     (lambda ()
       (detail-report-console recs))))
-
-  
-

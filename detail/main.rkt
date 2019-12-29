@@ -9,7 +9,7 @@
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
-          [detail-line (->* (string?) (#:line_break_length natural?) void?)]
-          [detail-prefix-line (->* (string? string?) (#:line_break_length natural?) void?)]
-          [detail-page (->* (procedure?) (#:line_break_length natural?) void?)]
+          [detail-line (->* (string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
+          [detail-prefix-line (->* (string? string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
+          [detail-page (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
           ))

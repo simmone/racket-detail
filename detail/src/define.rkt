@@ -3,6 +3,7 @@
 (provide (contract-out
           [*detail* parameter?]
           [*line_break_length* parameter?]
+          [*font_size* parameter?]
           [struct
            DETAIL
            (
@@ -23,16 +24,21 @@
           [struct DETAIL-LINE
                   (
                    (data string?)
+                   (line_break_length natural?)
+                   (font_size (or/c 'normal 'big 'small))
                    )]
           [struct DETAIL-PREFIX-LINE
                   (
                    (prefix string?)
                    (data string?)
+                   (line_break_length natural?)
+                   (font_size (or/c 'normal 'big 'small))
                    )]
           ))
 
 (define *detail* (make-parameter #f))
 (define *line_break_length* (make-parameter #f))
+(define *font_size* (make-parameter #f))
 
 (struct
  DETAIL
@@ -59,6 +65,8 @@
  DETAIL-LINE
  (
   [data #:mutable]
+  [line_break_length #:mutable]
+  [font_size #:mutable]
   ))
 
 (struct
@@ -66,4 +74,6 @@
  (
   [prefix #:mutable]
   [data #:mutable]
+  [line_break_length #:mutable]
+  [font_size #:mutable]
   ))
