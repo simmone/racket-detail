@@ -3,6 +3,7 @@
 (require racket/draw)
 
 (require "../define.rkt")
+(require "../lib.rkt")
 
 (provide (contract-out
           [detail-report-pdf (-> path-string? (listof DETAIL-PAGE?) void?)]
@@ -54,14 +55,26 @@
                                         (send dc set-font (make-font #:size 14))
                                         (loop-rec (cdr recs) (+ loop_line 50))])]
                                      [(DETAIL-LINE? rec)
-                                      (send dc draw-text (DETAIL-LINE-data rec) 0 loop_line)
-                                      (loop-rec (cdr recs) (+ loop_line 32))]
+                                      (loop-rec (cdr recs)
+                                                (let loop ([strs (zip-string (DETAIL-LINE-data rec) (*line_break_length*))]
+                                                           [y_pos loop_line])
+                                                  (if (not (null? strs))
+                                                      (begin
+                                                        (send dc draw-text (car strs) 0 y_pos)
+                                                        (loop (cdr strs) (+ y_pos 32)))
+                                                      y_pos)))]
                                      [(DETAIL-PREFIX-LINE? rec)
                                       (send dc draw-text
                                             (DETAIL-PREFIX-LINE-prefix rec)
                                             0 loop_line)
-                                      (send dc draw-text (DETAIL-PREFIX-LINE-data rec) (* prefix_length 10) loop_line)
-                                      (loop-rec (cdr recs) (+ loop_line 32))])))))
+                                      (loop-rec (cdr recs)
+                                                (let loop ([strs (zip-string (DETAIL-PREFIX-LINE-data rec) (*line_break_length*))]
+                                                           [y_pos loop_line])
+                                                  (if (not (null? strs))
+                                                      (begin
+                                                        (send dc draw-text (car strs) (* prefix_length 10) y_pos)
+                                                        (loop (cdr strs) (+ y_pos 32)))
+                                                      y_pos)))])))))
                         (lambda () (send dc end-page))))
                     (loop-page (cdr loop_pages)))))
         (lambda ()

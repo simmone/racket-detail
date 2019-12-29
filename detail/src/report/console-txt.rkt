@@ -1,6 +1,7 @@
 #lang racket
 
 (require "../define.rkt")
+(require "../lib.rkt")
 
 (provide (contract-out
           [detail-report-console (-> (listof DETAIL-PAGE?) void?)]
@@ -20,11 +21,21 @@
                        [(DETAIL-TITLE? rec)
                         (printf "~a\n\n" (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
-                        (printf "~a\n" (DETAIL-LINE-data rec))]
+                        (let loop ([strs (zip-string (DETAIL-LINE-data rec) (*line_break_length*))])
+                          (when (not (null? strs))
+                            (printf "~a\n" (car strs))
+                            (loop (cdr strs))))]
                        [(DETAIL-PREFIX-LINE? rec)
-                        (printf "~a~a\n"
-                                (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec))
-                                (DETAIL-PREFIX-LINE-data rec))]))
+                        (printf (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec)))
+                        (let loop ([strs (zip-string (DETAIL-PREFIX-LINE-data rec) (*line_break_length*))]
+                                   [line_no 1])
+                          (when (not (null? strs))
+                            (if (= line_no 1)
+                                (printf "~a\n" (car strs))
+                                (printf "~a~a\n"
+                                        (~a #:min-width prefix_length #:pad-string " ")
+                                        (car strs)))
+                            (loop (cdr strs) (add1 line_no))))]))
                       (loop-rec (cdr recs)))))
           (printf "----\n")
           (loop-page (cdr loop_pages)))))

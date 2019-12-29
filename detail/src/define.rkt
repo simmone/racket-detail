@@ -2,6 +2,7 @@
 
 (provide (contract-out
           [*detail* parameter?]
+          [*line_break_length* parameter?]
           [struct
            DETAIL
            (
@@ -31,6 +32,7 @@
           ))
 
 (define *detail* (make-parameter #f))
+(define *line_break_length* (make-parameter #f))
 
 (struct
  DETAIL

@@ -9,16 +9,17 @@
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
-          [detail-line (-> string? void?)]
-          [detail-prefix-line (-> string? string? void?)]
-          [detail-page (-> procedure? void?)]
+          [detail-line (->* (string?) (#:line_break_length natural?) void?)]
+          [detail-prefix-line (->* (string? string?) (#:line_break_length natural?) void?)]
+          [detail-page (->* (procedure?) (#:line_break_length natural?) void?)]
           ))
 
 (define (detail detail_types exception_value proc)
   (parameterize ([*detail*
                   (if detail_types
                       (DETAIL detail_types '())
-                      #f)])
+                      #f)]
+                 [*line_break_length* 60])
        (dynamic-wind
           (lambda () (void))
           (lambda ()
@@ -52,20 +53,25 @@
   (when (*detail*)
         (detail-add-rec (DETAIL-TITLE 'h3 h3))))
 
-(define (detail-prefix-line prefix val)
+(define (detail-prefix-line prefix val #:line_break_length [line_break_length (*line_break_length*)])
   (when (*detail*)
-        (detail-add-rec (DETAIL-PREFIX-LINE prefix val))))
+    (parameterize
+        ([*line_break_length* line_break_length])
+      (detail-add-rec (DETAIL-PREFIX-LINE prefix val)))))
 
-(define (detail-line val)
+(define (detail-line val #:line_break_length [line_break_length (*line_break_length*)])
   (when (*detail*)
-        (detail-add-rec (DETAIL-LINE val))))
+      (parameterize
+          ([*line_break_length* line_break_length])
+        (detail-add-rec (DETAIL-LINE val)))))
 
 (define *current_page* (make-parameter #f))
 
-(define (detail-page proc)
+(define (detail-page proc #:line_break_length [line_break_length (*line_break_length*)])
   (if (*detail*)
       (parameterize
-          ([*current_page* (DETAIL-PAGE 0 '())])
+          ([*current_page* (DETAIL-PAGE 0 '())]
+           [*line_break_length* line_break_length])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
