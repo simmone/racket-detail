@@ -26,8 +26,7 @@
           (lambda ()
             (with-handlers ([exn:fail?
                              (lambda (e)
-                               (DETAIL-LINE (exn-message e))
-                               (printf "~a\n" e)
+                               (detail-line (exn-message e))
                                (when (*detail*) (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))
                                exception_value)])
                            (proc)))
