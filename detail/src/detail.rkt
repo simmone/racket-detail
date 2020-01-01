@@ -11,7 +11,7 @@
           [detail-h3 (-> string? void?)]
           [detail-line (->* (string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
           [detail-prefix-line (->* (string? string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
-          [detail-page (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
+          [detail-page (->* (procedure?) (#:line_break_length natural? #:max_lines natural? #:font_size (or/c 'normal 'big 'small)) any)]
           ))
 
 (define (detail detail_types exception_value proc)
@@ -26,7 +26,9 @@
           (lambda ()
             (with-handlers ([exn:fail?
                              (lambda (e)
-                               (detail-line (exn-message e))
+                               (detail-page
+                                (lambda ()
+                                  (detail-line (exn-message e))))
                                (when (*detail*) (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))
                                exception_value)])
                            (proc)))
@@ -71,11 +73,12 @@
 
 (define (detail-page
          proc
+         #:max_lines [max_lines #f]
          #:line_break_length [line_break_length (*line_break_length*)]
          #:font_size [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
-          ([*current_page* (DETAIL-PAGE 0 '())]
+          ([*current_page* (DETAIL-PAGE 0 max_lines '())]
            [*line_break_length* line_break_length]
            [*font_size* font_size])
         (dynamic-wind

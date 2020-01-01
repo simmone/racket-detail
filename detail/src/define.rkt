@@ -14,6 +14,7 @@
            DETAIL-PAGE
            (
             (prefix_length natural?)
+            (max_lines (or/c #f natural?))
             (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?)))
             )]
           [struct DETAIL-TITLE
@@ -50,6 +51,7 @@
 (struct
  DETAIL-PAGE
  (
+  [max_lines #:mutable]
   [prefix_length #:mutable]
   [recs #:mutable]
   ))
