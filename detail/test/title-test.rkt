@@ -14,7 +14,8 @@
     "test-detail-title"
 
     (detail 
-     '(console "title.pdf")
+;     '(console "detail.pdf")
+     #f
      void
      (lambda ()
        (detail-page
