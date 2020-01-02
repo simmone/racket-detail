@@ -11,12 +11,17 @@
 
 (define PAGE_WIDTH 595)
 (define PAGE_HEIGHT 842)
+(define PAGE_LENGTH 1000)
 (define NORMAL_FONT_SIZE 14)
 (define BIG_FONT_SIZE 18)
 (define SMALL_FONT_SIZE 10)
 (define H1_FONT_SIZE 36)
+(define H1_LINE_HEIGHT 60)
 (define H2_FONT_SIZE 24)
+(define H2_LINE_HEIGHT 50)
 (define H3_FONT_SIZE 20)
+(define H3_LINE_HEIGHT 40)
+(define LINE_HEIGHT 30)
 
 (define (detail-report-pdf pdf_file pages)
   (let ([dc #f])
@@ -37,7 +42,6 @@
             (when (not (null? loop_pages))
               (let* ([page (car loop_pages)]
                      [prefix_length (DETAIL-PAGE-prefix_length page)])
-
                 (dynamic-wind
                     (lambda () (send dc start-page))
                     (lambda ()
@@ -50,20 +54,20 @@
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
                                 (send dc set-font (make-font #:size H1_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ 80 (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
+                                (loop-rec (cdr recs) (+ LINE_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
                                [(eq? (DETAIL-TITLE-level rec) 'h2)
                                 (send dc set-font (make-font #:size H2_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ 60 (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
+                                (loop-rec (cdr recs) (+ LINE_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
                                [(eq? (DETAIL-TITLE-level rec) 'h3)
                                 (send dc set-font (make-font #:size H3_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ 50 (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
+                                (loop-rec (cdr recs) (+ LINE_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
                              [(DETAIL-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec (cdr recs) (draw-lines dc 0 loop_line rec))]
                              [(DETAIL-PREFIX-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                              (draw-line dc (DETAIL-PREFIX-LINE-prefix rec) 0 loop_line)
-                              (loop-rec (cdr recs) (draw-lines dc (* prefix_length 10) loop_line (DETAIL-PREFIX-LINE-line rec)))])))))
+                              (let ([start_line (draw-line dc (DETAIL-PREFIX-LINE-prefix rec) 0 loop_line)])
+                                (loop-rec (cdr recs) (draw-lines dc (* prefix_length 10) (- start_line LINE_HEIGHT) (DETAIL-PREFIX-LINE-line rec))))])))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
         (lambda ()
@@ -81,16 +85,16 @@
   (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))]
              [y_pos start_y_pos])
     (if (not (null? strs))
-        (loop (cdr strs) (+ 32 (draw-line dc (car strs) start_x_pos y_pos)))
+        (loop (cdr strs) (draw-line dc (car strs) start_x_pos y_pos))
         y_pos)))
 
 (define (draw-line dc str x_pos y_pos)
-  (if (> y_pos 200)
+  (if (> y_pos PAGE_LENGTH)
       (begin
         (send dc end-page)
         (send dc start-page)
         (send dc draw-text str x_pos 0)
-        0)
+        LINE_HEIGHT)
       (begin
         (send dc draw-text str x_pos y_pos)
-        (+ y_pos 32))))
+        (+ y_pos LINE_HEIGHT))))
