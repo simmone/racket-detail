@@ -14,7 +14,7 @@
     "test-detail-page-auto-split"
 
     (detail 
-     '(raw console "detail.pdf")
+     '(console "detail.pdf")
      void
      (lambda ()
        (detail-page
