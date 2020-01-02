@@ -27,7 +27,10 @@
                             (loop (cdr strs))))]
                        [(DETAIL-PREFIX-LINE? rec)
                         (printf (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec)))
-                        (let loop ([strs (zip-string (DETAIL-PREFIX-LINE-data rec) (DETAIL-PREFIX-LINE-line_break_length rec))]
+                        (let loop ([strs
+                                    (zip-string
+                                     (DETAIL-LINE-data (DETAIL-PREFIX-LINE-line rec))
+                                     (DETAIL-LINE-line_break_length (DETAIL-PREFIX-LINE-line rec)))]
                                    [line_no 1])
                           (when (not (null? strs))
                             (if (= line_no 1)

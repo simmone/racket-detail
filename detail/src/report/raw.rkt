@@ -24,7 +24,7 @@
                         (printf "DETAIL-PREFIX-LINE:[~a][~a][~a]\n"
                                 prefix_length
                                 (DETAIL-PREFIX-LINE-prefix rec)
-                                (DETAIL-PREFIX-LINE-data rec))]
+                                (DETAIL-LINE-data (DETAIL-PREFIX-LINE-line rec)))]
                        ))
                     (loop-rec (cdr recs))))
             (printf "PAGE-END\n"))

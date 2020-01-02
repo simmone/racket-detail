@@ -11,7 +11,7 @@
           [detail-h3 (-> string? void?)]
           [detail-line (->* (string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
           [detail-prefix-line (->* (string? string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
-          [detail-page (->* (procedure?) (#:line_break_length natural? #:max_lines natural? #:font_size (or/c 'normal 'big 'small)) any)]
+          [detail-page (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) any)]
           ))
 
 (define (detail detail_types exception_value proc)
@@ -36,7 +36,7 @@
             (when (*detail*)
                   (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
 
-(define (detail-add-rec detail_rec)
+(define (detail-add-rec rec)
   (when (and
          (DETAIL-PREFIX-LINE? detail_rec)
          (> (string-length (DETAIL-PREFIX-LINE-prefix detail_rec)) (DETAIL-PAGE-prefix_length (*current_page*))))
@@ -55,17 +55,14 @@
   (when (*detail*)
         (detail-add-rec (DETAIL-TITLE 'h3 h3))))
 
-(define (detail-prefix-line
-         prefix val
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+(define (detail-prefix-line prefix line)
   (when (*detail*)
-    (detail-add-rec (DETAIL-PREFIX-LINE prefix val line_break_length font_size))))
+    (detail-add-rec (DETAIL-PREFIX-LINE prefix line))))
 
 (define (detail-line
          val
          #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+         #:font_size [font_size (*page_font_size*)])
   (when (*detail*)
     (detail-add-rec (DETAIL-LINE val line_break_length font_size))))
 
@@ -73,14 +70,13 @@
 
 (define (detail-page
          proc
-         #:max_lines [max_lines #f]
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+         #:page_line_break_length [page_line_break_length (*page_line_break_length*)]
+         #:page_font_size [page_font_size (*page_font_size*)])
   (if (*detail*)
       (parameterize
-          ([*current_page* (DETAIL-PAGE 0 max_lines '())]
-           [*line_break_length* line_break_length]
-           [*font_size* font_size])
+          ([*current_page* (DETAIL-PAGE 0 0 '())]
+           [*page_line_break_length* page_line_break_length]
+           [*page_font_size* page_font_size])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))

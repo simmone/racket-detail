@@ -2,8 +2,8 @@
 
 (provide (contract-out
           [*detail* parameter?]
-          [*line_break_length* parameter?]
-          [*font_size* parameter?]
+          [*page_line_break_length* parameter?]
+          [*page_font_size* parameter?]
           [struct
            DETAIL
            (
@@ -14,7 +14,6 @@
            DETAIL-PAGE
            (
             (prefix_length natural?)
-            (max_lines (or/c #f natural?))
             (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?)))
             )]
           [struct DETAIL-TITLE
@@ -31,15 +30,13 @@
           [struct DETAIL-PREFIX-LINE
                   (
                    (prefix string?)
-                   (data string?)
-                   (line_break_length natural?)
-                   (font_size (or/c 'normal 'big 'small))
+                   (line DETAIL-LINE?)
                    )]
           ))
 
 (define *detail* (make-parameter #f))
-(define *line_break_length* (make-parameter #f))
-(define *font_size* (make-parameter #f))
+(define *page_line_break_length* (make-parameter #f))
+(define *page_font_size* (make-parameter #f))
 
 (struct
  DETAIL
@@ -51,7 +48,6 @@
 (struct
  DETAIL-PAGE
  (
-  [max_lines #:mutable]
   [prefix_length #:mutable]
   [recs #:mutable]
   ))
@@ -75,7 +71,5 @@
  DETAIL-PREFIX-LINE
  (
   [prefix #:mutable]
-  [data #:mutable]
-  [line_break_length #:mutable]
-  [font_size #:mutable]
+  [line #:mutable]
   ))
