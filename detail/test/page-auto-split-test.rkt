@@ -18,7 +18,6 @@
      void
      (lambda ()
        (detail-page
-        #:max_lines 50
         (lambda ()
           (let loop ([i 0])
             (when (< i 100)

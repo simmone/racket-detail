@@ -64,41 +64,29 @@
                                 (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                                 (loop-rec (cdr recs) (+ loop_line 50))])]
                              [(DETAIL-LINE? rec)
-                              (cond
-                               [(eq? (DETAIL-LINE-font_size rec) 'big)
-                                (send dc set-font (make-font #:size BIG_FONT_SIZE))]
-                               [(eq? (DETAIL-LINE-font_size rec) 'small)
-                                (send dc set-font (make-font #:size SMALL_FONT_SIZE))]
-                               [else
-                                (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])
-                              (loop-rec (cdr recs)
-                                        (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))]
-                                                   [y_pos loop_line])
-                                          (if (not (null? strs))
-                                              (begin
-                                                (send dc draw-text (car strs) 0 y_pos)
-                                                (loop (cdr strs) (+ y_pos 32)))
-                                              y_pos)))]
+                              (loop-rec (cdr recs) (draw-line dc 0 loop_line rec))]
                              [(DETAIL-PREFIX-LINE? rec)
-                              (cond
-                               [(eq? (DETAIL-PREFIX-LINE-font_size rec) 'big)
-                                (send dc set-font (make-font #:size BIG_FONT_SIZE))]
-                               [(eq? (DETAIL-PREFIX-LINE-font_size rec) 'small)
-                                (send dc set-font (make-font #:size SMALL_FONT_SIZE))]
-                               [else
-                                (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])
-                              (send dc draw-text
-                                    (DETAIL-PREFIX-LINE-prefix rec)
-                                    0 loop_line)
-                              (loop-rec (cdr recs)
-                                        (let loop ([strs (zip-string (DETAIL-PREFIX-LINE-data rec) (DETAIL-PREFIX-LINE-line_break_length rec))]
-                                                   [y_pos loop_line])
-                                          (if (not (null? strs))
-                                              (begin
-                                                (send dc draw-text (car strs) (* prefix_length 10) y_pos)
-                                                (loop (cdr strs) (+ y_pos 32)))
-                                              y_pos)))])))))
+                              (send dc draw-text (DETAIL-PREFIX-LINE-prefix rec) 0 loop_line rec)
+                              (loop-rec (cdr recs) (draw-line dc (* prefix_length 10) loop_line))])))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
         (lambda ()
           (send dc end-doc)))))
+
+(define (draw-line dc start_x_pos start_y_pos rec)
+  (cond
+   [(eq? (DETAIL-LINE-font_size rec) 'big)
+    (send dc set-font (make-font #:size BIG_FONT_SIZE))]
+   [(eq? (DETAIL-LINE-font_size rec) 'small)
+    (send dc set-font (make-font #:size SMALL_FONT_SIZE))]
+   [else
+    (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])
+
+  (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))]
+             [y_pos start_y_pos])
+    (if (not (null? strs))
+        (begin
+          (send dc draw-text (car strs) start_x_pos y_pos)
+          (loop (cdr strs) (+ y_pos 32)))
+        y_pos)))
+
