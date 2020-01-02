@@ -42,8 +42,7 @@
                     (lambda () (send dc start-page))
                     (lambda ()
                       (let loop-rec ([recs (DETAIL-PAGE-recs page)]
-                                     [loop_line 0]
-                                     [sum_line 0])
+                                     [loop_line 0])
                         (when (not (null? recs))
                           (let ([rec (car recs)])
                             (cond
@@ -51,23 +50,19 @@
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
                                 (send dc set-font (make-font #:size H1_FONT_SIZE))
-                                (send dc draw-text (DETAIL-TITLE-data rec) 0 loop_line)
-                                (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ loop_line 80) (+ sum_line 4))]
+                                (loop-rec (cdr recs) (+ 80 (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
                                [(eq? (DETAIL-TITLE-level rec) 'h2)
                                 (send dc set-font (make-font #:size H2_FONT_SIZE))
-                                (send dc draw-text (DETAIL-TITLE-data rec) 0 loop_line)
-                                (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ loop_line 60) (+ sum_line 3))]
+                                (loop-rec (cdr recs) (+ 60 (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
                                [(eq? (DETAIL-TITLE-level rec) 'h3)
                                 (send dc set-font (make-font #:size H3_FONT_SIZE))
-                                (send dc draw-text (DETAIL-TITLE-data rec) 0 loop_line)
-                                (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ loop_line 50) (+ sum_line 2)])]
+                                (loop-rec (cdr recs) (+ 50 (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
                              [(DETAIL-LINE? rec)
+                              (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec (cdr recs) (draw-lines dc 0 loop_line rec))]
                              [(DETAIL-PREFIX-LINE? rec)
-                              (send dc draw-text (DETAIL-PREFIX-LINE-prefix rec) 0 loop_line rec)
+                              (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
+                              (draw-line dc (DETAIL-PREFIX-LINE-prefix rec) 0 loop_line)
                               (loop-rec (cdr recs) (draw-lines dc (* prefix_length 10) loop_line (DETAIL-PREFIX-LINE-line rec)))])))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
@@ -86,13 +81,16 @@
   (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))]
              [y_pos start_y_pos])
     (if (not (null? strs))
-        (begin
-          (send dc draw-text (car strs) start_x_pos y_pos)
-          (loop (cdr strs) (+ y_pos 32)))
+        (loop (cdr strs) (+ 32 (draw-line dc (car strs) start_x_pos y_pos)))
         y_pos)))
 
-(define (draw-line dc str x_pos y_pos line_count)
-  (if (> (add1 line_count))
+(define (draw-line dc str x_pos y_pos)
+  (if (> y_pos 200)
+      (begin
         (send dc end-page)
         (send dc start-page)
         (send dc draw-text str x_pos 0)
+        0)
+      (begin
+        (send dc draw-text str x_pos y_pos)
+        (+ y_pos 32))))
