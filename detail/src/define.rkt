@@ -23,14 +23,13 @@
                    )]
           [struct DETAIL-LINE
                   (
-                   (data string?)
+                   (item DETAIL-ITEM?)
                    (line_break_length natural?)
                    (font_size (or/c 'normal 'big 'small))
                    )]
-          [struct DETAIL-PREFIX-LINE
+          [struct DETAIL-ITEM
                   (
-                   (prefix string?)
-                   (line DETAIL-LINE?)
+                   (data string?)
                    )]
           ))
 
