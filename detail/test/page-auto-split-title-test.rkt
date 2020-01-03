@@ -14,7 +14,8 @@
     "test-detail-page-auto-split-title"
 
     (detail 
-     '(console "detail.pdf")
+;     '(console "detail.pdf")
+     #f
      void
      (lambda ()
        (detail-page
