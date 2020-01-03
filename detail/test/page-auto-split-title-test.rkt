@@ -22,6 +22,8 @@
           (let loop ([i 0])
             (when (< i 100)
                   (detail-h1 (number->string i))
+                  (detail-h2 (number->string i))
+                  (detail-h3 (number->string i))
                   (loop (add1 i)))))))))
    ))
 

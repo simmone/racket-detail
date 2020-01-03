@@ -16,11 +16,11 @@
 (define BIG_FONT_SIZE 18)
 (define SMALL_FONT_SIZE 10)
 (define H1_FONT_SIZE 36)
-(define H1_LINE_HEIGHT 60)
+(define H1_HEIGHT 40)
 (define H2_FONT_SIZE 24)
-(define H2_LINE_HEIGHT 50)
+(define H2_HEIGHT 30)
 (define H3_FONT_SIZE 20)
-(define H3_LINE_HEIGHT 40)
+(define H3_HEIGHT 10)
 (define LINE_HEIGHT 30)
 
 (define (detail-report-pdf pdf_file pages)
@@ -54,13 +54,13 @@
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
                                 (send dc set-font (make-font #:size H1_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ LINE_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
+                                (loop-rec (cdr recs) (+ H1_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
                                [(eq? (DETAIL-TITLE-level rec) 'h2)
                                 (send dc set-font (make-font #:size H2_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ LINE_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
+                                (loop-rec (cdr recs) (+ H2_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))]
                                [(eq? (DETAIL-TITLE-level rec) 'h3)
                                 (send dc set-font (make-font #:size H3_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ LINE_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
+                                (loop-rec (cdr recs) (+ H3_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
                              [(DETAIL-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec (cdr recs) (draw-lines dc 0 loop_line rec))]
