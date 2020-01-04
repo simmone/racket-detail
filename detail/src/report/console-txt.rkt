@@ -13,7 +13,7 @@
     (when (not (null? loop_pages))
           (printf "----\n")
           (let* ([page (car loop_pages)]
-                 [prefix_length (DETAIL-PAGE-prefix_length page)])
+                 [items_length (DETAIL-PAGE-items_length page)])
             (let loop-rec ([recs (DETAIL-PAGE-recs page)])
               (when (not (null? recs))
                     (let ([rec (car recs)])
@@ -21,24 +21,13 @@
                        [(DETAIL-TITLE? rec)
                         (printf "~a\n\n" (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
-                        (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))])
-                          (when (not (null? strs))
-                            (printf "~a\n" (car strs))
-                            (loop (cdr strs))))]
-                       [(DETAIL-PREFIX-LINE? rec)
-                        (printf (~a #:min-width prefix_length #:pad-string " " #:align 'right (DETAIL-PREFIX-LINE-prefix rec)))
-                        (let loop ([strs
-                                    (zip-string
-                                     (DETAIL-LINE-data (DETAIL-PREFIX-LINE-line rec))
-                                     (DETAIL-LINE-line_break_length (DETAIL-PREFIX-LINE-line rec)))]
-                                   [line_no 1])
-                          (when (not (null? strs))
-                            (if (= line_no 1)
-                                (printf "~a\n" (car strs))
-                                (printf "~a~a\n"
-                                        (~a #:min-width prefix_length #:pad-string " ")
-                                        (car strs)))
-                            (loop (cdr strs) (add1 line_no))))]))
+                        (let loop-item ([items (DETAIL-LINE-items rec)]
+                                        [items_length (DETAIL-PAGE-items_length page)]
+                                        [index 1])
+                          (when (not (null? items))
+                            (printf "~a " (~a #:min-width (car items_length) (car items)))
+                            (loop-item (cdr items) (cdr items_length) (add1 index))))
+                        (printf "\n")]))
                     (loop-rec (cdr recs)))))
           (printf "----\n")
           (loop-page (cdr loop_pages)))))
