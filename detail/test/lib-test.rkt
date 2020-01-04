@@ -1,9 +1,8 @@
 #lang racket
 
-(require rackunit)
-(require rackunit/text-ui)
+(require rackunit rackunit/text-ui)
 
-(require "../src/lib.rkt")
+(require "../../src/lib.rkt")
 
 (define test-detail
   (test-suite 

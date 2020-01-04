@@ -13,7 +13,6 @@
     "test-detail-hierachy"
     
     (detail
-     #:formats '(raw)
      #:line_break_length 1
      #:font_size 'small
      (lambda ()
@@ -40,7 +39,8 @@
 
        (check-equal? (*line_break_length*) 1)
        (check-equal? (*font_size*) 'small)
-       )))
+       ))
+    )
    ))
 
 (run-tests test-detail)

@@ -21,6 +21,7 @@
                          #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) void?)]
+          [detail-line-add-item (-> string? void?)]
           [detail-page (->*
                         (procedure?)
                         (
