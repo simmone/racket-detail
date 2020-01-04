@@ -9,9 +9,8 @@
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
-          [detail-line (->* (string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
-          [detail-prefix-line (->* (string? string?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
-          [detail-page (->* (procedure?) (#:page_line_break_length natural? #:page_font_size (or/c 'normal 'big 'small)) any)]
+          [detail-line (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
+          [detail-page (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) any)]
           ))
 
 (define (detail detail_types exception_value proc)
@@ -19,8 +18,8 @@
                   (if detail_types
                       (DETAIL detail_types '())
                       #f)]
-                 [*page_line_break_length* 60]
-                 [*page_font_size* 'normal])
+                 [*line_break_length* 60]
+                 [*font_size* 'normal])
        (dynamic-wind
           (lambda () (void))
           (lambda ()
@@ -56,29 +55,45 @@
         (detail-add-rec (DETAIL-TITLE 'h3 h3))))
 
 (define (detail-line
-         val
-         #:line_break_length [line_break_length (*page_line_break_length*)]
-         #:font_size [font_size (*page_font_size*)])
-  (when (*detail*)
-    (detail-add-rec (DETAIL-LINE val line_break_length font_size))))
+         proc
+         #:line_break_length [line_break_length (*line_break_length*)]
+         #:font_size [font_size (*font_size*)])
+  (if (*detail*)
+      (parameterize
+          ([*current_line* (DETAIL-LINE '() #:line_break_length (*line_break_length*) #:font_size (*font_size*))])
+        (dynamic-wind
+            (lambda () (void))
+            (lambda () (proc))
+            (lambda ()
+              (detail-add-rec (*current_line*)))))))
 
-(define (detail-prefix-line prefix  val
-         #:line_break_length [line_break_length (*page_line_break_length*)]
-         #:font_size [font_size (*page_font_size*)])
+(define (detail-line-add-item val)
   (when (*detail*)
-    (detail-add-rec (DETAIL-PREFIX-LINE prefix (DETAIL-LINE val line_break_length font_size)))))
+     (set-DETAIL-LINE-items! (*current_line*) `(,@(DETAIL-LINE-items (*current_line*)) ,val))
+    (let* ([items (DETAIL-LINE-items (*current_line*))]
+           [items_length (DETAIL-LINE-items_length (*current_line*))]
+           [val_length (string-length val)]
+           [val_pos (sub1 (length items))])
+      (if (< (length items_length) (length items))
+          (set-DETAIL-LINE-items_length!
+           (*current_line*)
+           `(,@(DETAIL-LINE-items_length (*current_line*)) ,val_length))
+          (when (> (string-length val) (list-ref items_length val_pos))
+            (set-DETAIL-LINE-items_length!
+             (*current_line*)
+             (list-set items_length val_pos val_length)))))))
 
 (define *current_page* (make-parameter #f))
 
 (define (detail-page
          proc
-         #:page_line_break_length [page_line_break_length (*page_line_break_length*)]
-         #:page_font_size [page_font_size (*page_font_size*)])
+         #:line_break_length [line_break_length (*line_break_length*)]
+         #:font_size [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
           ([*current_page* (DETAIL-PAGE 0 '())]
-           [*page_line_break_length* page_line_break_length]
-           [*page_font_size* page_font_size])
+           [*line_break_length* line_break_length]
+           [*font_size* font_size])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
