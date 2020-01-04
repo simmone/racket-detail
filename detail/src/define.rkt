@@ -7,13 +7,13 @@
           [struct
            DETAIL
            (
-            (report (or/c #f (listof (or/c 'raw 'console path-string?))))
+            (formats (or/c #f (listof (or/c 'raw 'console path-string?))))
             (pages (listof DETAIL-PAGE?))
             )]
           [struct
            DETAIL-PAGE
            (
-            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?)))
+            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE?)))
             )]
           [struct DETAIL-TITLE
                   (
@@ -36,7 +36,7 @@
 (struct
  DETAIL
  (
-  [report #:mutable]
+  [formats #:mutable]
   [pages #:mutable]
   ))
 

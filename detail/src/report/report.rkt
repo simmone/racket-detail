@@ -2,27 +2,28 @@
 
 (require "../define.rkt")
 (require "raw.rkt")
-(require "console-txt.rkt")
-(require "pdf.rkt")
+;; (require "console-txt.rkt")
+;; (require "pdf.rkt")
 
 (provide (contract-out
-          [detail-report (-> (listof (or/c 'raw 'console path-string?)) (listof DETAIL-PAGE?) void?)]
+          [detail-report (-> DETAIL? void?)]
           ))
 
-(define (detail-report types recs)
-  (let loop ([loop_types types])
-    (when (not (null? loop_types))
-      (cond
-       [(eq? (car loop_types) 'raw)
-        (detail-report-raw recs)]
-       [(eq? (car loop_types) 'console)
-        (detail-report-console recs)]
-       [(regexp-match #rx"\\.txt$" (car loop_types))
-        (detail-report-txt (car loop_types) recs)]
-       [(regexp-match #rx"\\.pdf$" (car loop_types))
-        (detail-report-pdf (car loop_types) recs)]
-       [else
-        (detail-report-console recs)])
-      (loop (cdr loop_types)))))
+(define (detail-report detail)
+  (let loop ([loop_formats (DETAIL-formats detail)])
+    (when (not (null? loop_formats))
+      (let ([pages (DETAIL-pages detail)])
+        (cond
+         [(eq? (car loop_formats) 'raw)
+          (detail-report-raw pages)]
+;       [(eq? (car loop_formats) 'console)
+;        (detail-report-console recs)]
+;       [(regexp-match #rx"\\.txt$" (car loop_formats))
+;        (detail-report-txt (car loop_formats) recs)]
+;       [(regexp-match #rx"\\.pdf$" (car loop_formats))
+;        (detail-report-pdf (car loop_formats) recs)]
+         [else
+          (detail-report-raw pages)])
+      (loop (cdr loop_formats))))))
   
 

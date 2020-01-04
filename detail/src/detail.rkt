@@ -4,19 +4,40 @@
 (require "report/report.rkt")
 
 (provide (contract-out
-          [detail (-> (or/c #f (listof (or/c 'raw 'console path-string?))) any/c procedure? any)]
-          [detail-add-rec (-> (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-PREFIX-LINE?) void?)]
+          [detail (->*
+                   (procedure?)
+                   (
+                    #:formats (or/c #f (listof (or/c 'raw 'console path-string?)))
+                    #:exception_value any/c
+                    #:line_break_length natural?
+                    #:font_size (or/c 'normal 'big 'small)
+                    ) any)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
-          [detail-line (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) void?)]
-          [detail-page (->* (procedure?) (#:line_break_length natural? #:font_size (or/c 'normal 'big 'small)) any)]
+          [detail-line (->*
+                        (procedure?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) void?)]
+          [detail-page (->*
+                        (procedure?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) any)]
           ))
 
-(define (detail detail_types exception_value proc)
+(define (detail
+         #:formats [formats #f]
+         #:exception_value [exception_value #f]
+         #:line_break_length [line_break_length 60]
+         #:font_size [font_size 'normal]
+         proc)
   (parameterize ([*detail*
-                  (if detail_types
-                      (DETAIL detail_types '())
+                  (if formats
+                      (DETAIL formats '())
                       #f)]
                  [*line_break_length* 60]
                  [*font_size* 'normal])
@@ -28,39 +49,40 @@
                                (detail-page
                                 (lambda ()
                                   (detail-line (exn-message e))))
-                               (when (*detail*) (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))
+                               (when (*detail*) (detail-report (*detail*)))
                                exception_value)])
-                           (proc)))
+            (proc)))
           (lambda ()
             (when (*detail*)
-                  (detail-report (DETAIL-report (*detail*)) (DETAIL-pages (*detail*))))))))
+                  (detail-report (*detail*)))))))
 
-(define (detail-add-rec rec)
-  (when (and
-         (DETAIL-PREFIX-LINE? rec)
-         (> (string-length (DETAIL-PREFIX-LINE-prefix rec)) (DETAIL-PAGE-prefix_length (*current_page*))))
-        (set-DETAIL-PAGE-prefix_length! (*current_page*) (string-length (DETAIL-PREFIX-LINE-prefix rec))))
-  (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec)))
+(define *current_page* (make-parameter #f))
 
-(define (detail-h1 h1)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-TITLE 'h1 h1))))
-
-(define (detail-h2 h2)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-TITLE 'h2 h2))))
-
-(define (detail-h3 h3)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-TITLE 'h3 h3))))
-
-(define (detail-line
+(define (detail-page
          proc
          #:line_break_length [line_break_length (*line_break_length*)]
          #:font_size [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
-          ([*current_line* (DETAIL-LINE '() #:line_break_length (*line_break_length*) #:font_size (*font_size*))])
+          ([*current_page* (DETAIL-PAGE '())]
+           [*line_break_length* line_break_length]
+           [*font_size* font_size])
+        (dynamic-wind
+            (lambda () (void))
+            (lambda () (proc))
+            (lambda ()
+              (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
+      (proc)))
+
+(define *current_line* (make-parameter #f))
+
+(define (detail-line
+         proc
+         #:line_break_length [line_break_length (*line_break_length*)]
+         #:font_size [font_size (*font_size*)])
+  (when (*detail*)
+      (parameterize
+          ([*current_line* (DETAIL-LINE '() '() (*line_break_length*) (*font_size*))])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
@@ -83,20 +105,17 @@
              (*current_line*)
              (list-set items_length val_pos val_length)))))))
 
-(define *current_page* (make-parameter #f))
+(define (detail-h1 h1)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-TITLE 'h1 h1))))
 
-(define (detail-page
-         proc
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
-  (if (*detail*)
-      (parameterize
-          ([*current_page* (DETAIL-PAGE 0 '())]
-           [*line_break_length* line_break_length]
-           [*font_size* font_size])
-        (dynamic-wind
-            (lambda () (void))
-            (lambda () (proc))
-            (lambda ()
-              (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
-      (proc)))
+(define (detail-h2 h2)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-TITLE 'h2 h2))))
+
+(define (detail-h3 h3)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-TITLE 'h3 h3))))
+
+(define (detail-add-rec rec)
+  (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec)))
