@@ -20,7 +20,8 @@
            (detail-line
             (lambda ()
               (detail-line-add-item "123")
-              (detail-line-add-item "12345")))
+              (detail-line-add-item "12345")
+              (detail-line-add-item "")))
 
            (detail-line
             (lambda ()

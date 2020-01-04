@@ -65,7 +65,7 @@
          #:font_size [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
-          ([*current_page* (DETAIL-PAGE '())]
+          ([*current_page* (DETAIL-PAGE '() '())]
            [*line_break_length* line_break_length]
            [*font_size* font_size])
         (dynamic-wind
@@ -83,7 +83,7 @@
          #:font_size [font_size (*font_size*)])
   (when (*detail*)
       (parameterize
-          ([*current_line* (DETAIL-LINE '() '() (*line_break_length*) (*font_size*))])
+          ([*current_line* (DETAIL-LINE '() (*line_break_length*) (*font_size*))])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
@@ -94,16 +94,16 @@
   (when (*detail*)
      (set-DETAIL-LINE-items! (*current_line*) `(,@(DETAIL-LINE-items (*current_line*)) ,val))
     (let* ([items (DETAIL-LINE-items (*current_line*))]
-           [items_length (DETAIL-LINE-items_length (*current_line*))]
+           [items_length (DETAIL-PAGE-items_length (*current_page*))]
            [val_length (string-length val)]
            [val_pos (sub1 (length items))])
       (if (< (length items_length) (length items))
-          (set-DETAIL-LINE-items_length!
-           (*current_line*)
-           `(,@(DETAIL-LINE-items_length (*current_line*)) ,val_length))
+          (set-DETAIL-PAGE-items_length!
+           (*current_page*)
+           `(,@(DETAIL-PAGE-items_length (*current_page*)) ,val_length))
           (when (> (string-length val) (list-ref items_length val_pos))
-            (set-DETAIL-LINE-items_length!
-             (*current_line*)
+            (set-DETAIL-PAGE-items_length!
+             (*current_page*)
              (list-set items_length val_pos val_length)))))))
 
 (define (detail-h1 h1)

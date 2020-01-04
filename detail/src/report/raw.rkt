@@ -19,11 +19,11 @@
                         (printf "DETAIL-TITLE:[~a][~a]\n" (DETAIL-TITLE-level rec) (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
                         (let loop-item ([items (DETAIL-LINE-items rec)]
-                                        [items_length (DETAIL-LINE-items_length rec)]
+                                        [items_length (DETAIL-PAGE-items_length page)]
                                         [index 1])
                           (when (not (null? items))
                             (printf "[~a][~a][~a] "
-                                    index
+                                    (~a #:min-width 5 index)
                                     (~a #:min-width 5 (car items_length))
                                     (~a #:min-width (car items_length) (car items)))
                             (loop-item (cdr items) (cdr items_length) (add1 index))))

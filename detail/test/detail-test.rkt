@@ -2,8 +2,8 @@
 
 (require rackunit rackunit/text-ui)
 
-(require "../../src/define.rkt")
-(require "../../src/detail.rkt")
+(require "../src/define.rkt")
+(require "../src/detail.rkt")
 
 (define test-detail
   (test-suite 
