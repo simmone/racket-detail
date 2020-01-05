@@ -20,7 +20,7 @@
         (detail-line
          #:line_break_length 8
          (lambda ()
-           (detail-line-add-item "1234567890")))
+           (detail-line-add-item "123456789012345678901")))
 
         (detail-line
          #:line_break_length 22

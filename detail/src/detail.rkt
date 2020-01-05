@@ -83,7 +83,7 @@
          #:font_size [font_size (*font_size*)])
   (when (*detail*)
       (parameterize
-          ([*current_line* (DETAIL-LINE '() (*line_break_length*) (*font_size*))])
+          ([*current_line* (DETAIL-LINE '() line_break_length font_size)])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))

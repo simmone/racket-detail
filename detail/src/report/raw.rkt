@@ -18,6 +18,9 @@
                        [(DETAIL-TITLE? rec)
                         (printf "DETAIL-TITLE:[~a][~a]\n" (DETAIL-TITLE-level rec) (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
+                        (printf "DETAIL-LINE:[~a][~a]\n"
+                                (DETAIL-LINE-line_break_length rec)
+                                (DETAIL-LINE-font_size rec))
                         (let loop-item ([items (DETAIL-LINE-items rec)]
                                         [items_length (DETAIL-PAGE-items_length page)]
                                         [index 1])
