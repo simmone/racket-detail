@@ -23,6 +23,12 @@
                    )]
           [struct DETAIL-LINE
                   (
+                   (line string?)
+                   (line_break_length natural?)
+                   (font_size (or/c 'normal 'big 'small))
+                   )]
+          [struct DETAIL-LIST
+                  (
                    (items (listof string?))
                    (line_break_length natural?)
                    (font_size (or/c 'normal 'big 'small))
