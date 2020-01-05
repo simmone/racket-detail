@@ -4,28 +4,29 @@
 
 (define (test-console)
   (detail
-   #:formats '(console)
-   #:line_break_length 1
-   #:font_size 'small
+   #:formats '(raw console)
    (lambda ()
      (detail-page
-      #:line_break_length 2
-      #:font_size 'big
       (lambda ()
         (detail-h1 "Hello World!")
 
         (detail-line
-         #:line_break_length 3
-         #:font_size 'normal
+         #:line_break_length 8
          (lambda ()
            (detail-line-add-item "123")
            (detail-line-add-item "12345")
            (detail-line-add-item "")))
 
         (detail-line
+         #:line_break_length 8
          (lambda ()
-           (detail-line-add-item "1")
-           (detail-line-add-item "123456")
-           (detail-line-add-item "12345678"))))))))
+           (detail-line-add-item "1234567890")))
+
+        (detail-line
+         #:line_break_length 22
+         (lambda ()
+           (detail-line-add-item "1234567890")
+           (detail-line-add-item "1234567890")
+           (detail-line-add-item "1234567890"))))))))
 
 (test-console)

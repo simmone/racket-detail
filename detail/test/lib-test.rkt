@@ -20,6 +20,8 @@
     (check-equal? (zip-string "1234" 4) '("1234"))
 
     (check-equal? (zip-string "1234" 5) '("1234"))
+
+    (check-equal? (zip-string "" 32) '(""))
     )))
 
 (run-tests test-detail)
