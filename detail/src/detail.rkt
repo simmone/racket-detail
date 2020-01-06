@@ -81,7 +81,7 @@
               (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
       (proc)))
 
-(define *current_line* (make-parameter #f))
+(define *current_list* (make-parameter #f))
 
 (define (detail-list
          proc
@@ -89,16 +89,16 @@
          #:font_size [font_size (*font_size*)])
   (when (*detail*)
       (parameterize
-          ([*current_line* (DETAIL-LINE '() line_break_length font_size)])
+          ([*current_list* (DETAIL-LIST '() '() line_break_length font_size)])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
             (lambda ()
               (detail-add-rec (*current_line*)))))))
 
-(define (detail-line-add-item val)
+(define (detail-list-add-col val)
   (when (*detail*)
-     (set-DETAIL-LINE-items! (*current_line*) `(,@(DETAIL-LINE-items (*current_line*)) ,val))
+     (set-DETAIL-LIST-cols! (*current_line*) `(,@(DETAIL-LINE-items (*current_line*)) ,val))
     (let* ([items (DETAIL-LINE-items (*current_line*))]
            [items_length (DETAIL-PAGE-items_length (*current_page*))]
            [val_length (string-length val)]
