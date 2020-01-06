@@ -13,8 +13,7 @@
           [struct
            DETAIL-PAGE
            (
-            (items_length (listof natural?))
-            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE?)))
+            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-LIST?)))
             )]
           [struct DETAIL-TITLE
                   (
@@ -29,7 +28,8 @@
                    )]
           [struct DETAIL-LIST
                   (
-                   (items (listof string?))
+                   (cols (listof string?))
+                   (cols_length (listof natural?))
                    (line_break_length natural?)
                    (font_size (or/c 'normal 'big 'small))
                    )]
@@ -49,7 +49,7 @@
 (struct
  DETAIL-PAGE
  (
-  [items_length #:mutable]
+  [cols_length #:mutable]
   [recs #:mutable]
   ))
 
@@ -63,13 +63,16 @@
 (struct
  DETAIL-LINE
  (
-  [items #:mutable]
+  [line #:mutable]
   [line_break_length #:mutable]
   [font_size #:mutable]
   ))
 
 (struct
- DETAIL-ITEM
+ DETAIL-LIST
  (
-  [data #:mutable]
+  [cols #:mutable]
+  [cols_length #:mutable]
+  [line_break_length #:mutable]
+  [font_size #:mutable]
   ))

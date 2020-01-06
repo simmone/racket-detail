@@ -16,12 +16,18 @@
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
           [detail-line (->*
+                        (string?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) void?)]
+          [detail-list (->*
                         (procedure?)
                         (
                          #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) void?)]
-          [detail-line-add-item (-> string? void?)]
+          [detail-list-add-col (-> string? void?)]
           [detail-page (->*
                         (procedure?)
                         (
@@ -77,7 +83,7 @@
 
 (define *current_line* (make-parameter #f))
 
-(define (detail-line
+(define (detail-list
          proc
          #:line_break_length [line_break_length (*line_break_length*)]
          #:font_size [font_size (*font_size*)])
@@ -105,6 +111,13 @@
             (set-DETAIL-PAGE-items_length!
              (*current_page*)
              (list-set items_length val_pos val_length)))))))
+
+(define (detail-line
+         line
+         #:line_break_length [line_break_length (*line_break_length*)]
+         #:font_size [font_size (*font_size*)])
+  (when (*detail*)
+        (detail-add-rec (DETAIL-LINE line line_break_length font_size))))
 
 (define (detail-h1 h1)
   (when (*detail*)
