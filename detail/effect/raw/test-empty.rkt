@@ -12,9 +12,12 @@
       #:line_break_length 2
       #:font_size 'big
       (lambda ()
-        (detail-line
-         #:line_break_length 3
-         #:font_size 'normal
-         (lambda () (void))))))))
+        (detail-list
+         #:line_break_length 4
+         #:font_size 'small
+         (lambda ()
+           (detail-row
+            (lambda ()
+              (void))))))))))
 
 (test-empty)

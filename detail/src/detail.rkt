@@ -12,6 +12,12 @@
                     #:line_break_length natural?
                     #:font_size (or/c 'normal 'big 'small)
                     ) any)]
+          [detail-page (->*
+                        (procedure?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) any)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
@@ -27,13 +33,8 @@
                          #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) void?)]
-          [detail-list-add-col (-> string? void?)]
-          [detail-page (->*
-                        (procedure?)
-                        (
-                         #:line_break_length natural?
-                         #:font_size (or/c 'normal 'big 'small)
-                         ) any)]
+          [detail-row (-> procedure? void?)]
+          [detail-add-col (-> string? void?)]
           ))
 
 (define (detail
@@ -71,7 +72,7 @@
          #:font_size [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
-          ([*current_page* (DETAIL-PAGE '() '())]
+          ([*current_page* (DETAIL-PAGE '())]
            [*line_break_length* line_break_length]
            [*font_size* font_size])
         (dynamic-wind
@@ -80,6 +81,28 @@
             (lambda ()
               (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
       (proc)))
+
+(define (detail-add-rec rec)
+  (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec)))
+
+(define (detail-h1 h1)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-TITLE 'h1 h1))))
+
+(define (detail-h2 h2)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-TITLE 'h2 h2))))
+
+(define (detail-h3 h3)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-TITLE 'h3 h3))))
+
+(define (detail-line
+         line
+         #:line_break_length [line_break_length (*line_break_length*)]
+         #:font_size [font_size (*font_size*)])
+  (when (*detail*)
+        (detail-add-rec (DETAIL-LINE line line_break_length font_size))))
 
 (define *current_list* (make-parameter #f))
 
@@ -94,42 +117,33 @@
             (lambda () (void))
             (lambda () (proc))
             (lambda ()
-              (detail-add-rec (*current_line*)))))))
+              (detail-add-rec (*current_list*)))))))
 
-(define (detail-list-add-col val)
+(define *current_row* (make-parameter #f))
+
+(define (detail-row proc)
   (when (*detail*)
-     (set-DETAIL-LIST-cols! (*current_line*) `(,@(DETAIL-LINE-items (*current_line*)) ,val))
-    (let* ([items (DETAIL-LINE-items (*current_line*))]
-           [items_length (DETAIL-PAGE-items_length (*current_page*))]
-           [val_length (string-length val)]
-           [val_pos (sub1 (length items))])
-      (if (< (length items_length) (length items))
-          (set-DETAIL-PAGE-items_length!
-           (*current_page*)
-           `(,@(DETAIL-PAGE-items_length (*current_page*)) ,val_length))
-          (when (> (string-length val) (list-ref items_length val_pos))
-            (set-DETAIL-PAGE-items_length!
-             (*current_page*)
-             (list-set items_length val_pos val_length)))))))
+      (parameterize
+          ([*current_row* (DETAIL-ROW '())])
+        (dynamic-wind
+            (lambda () (void))
+            (lambda () (proc))
+            (lambda ()
+              (set-DETAIL-LIST-rows! (*current_list*) `(,@(DETAIL-LIST-rows (*current_list*)) ,(*current_row*))))))))
 
-(define (detail-line
-         line
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+(define (detail-add-col val)
   (when (*detail*)
-        (detail-add-rec (DETAIL-LINE line line_break_length font_size))))
+        (set-DETAIL-ROW-cols! (*current_row*) `(,@(DETAIL-ROW-cols (*current_row*)) ,val))
 
-(define (detail-h1 h1)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-TITLE 'h1 h1))))
-
-(define (detail-h2 h2)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-TITLE 'h2 h2))))
-
-(define (detail-h3 h3)
-  (when (*detail*)
-        (detail-add-rec (DETAIL-TITLE 'h3 h3))))
-
-(define (detail-add-rec rec)
-  (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec)))
+        (let* ([cols (DETAIL-ROW-cols (*current_row*))]
+               [cols_width (DETAIL-LIST-cols_width (*current_list*))]
+               [val_length (string-length val)]
+               [val_pos (sub1 (length cols))])
+         (if (< (length cols_width) (length cols))
+              (set-DETAIL-LIST-cols_width!
+               (*current_list*)
+               `(,@(DETAIL-LIST-cols_width (*current_list*)) ,val_length))
+              (when (> val_length (list-ref cols_width val_pos))
+                    (set-DETAIL-LIST-cols_width!
+                     (*current_list*)
+                     (list-set cols_width val_pos val_length)))))))

@@ -11,20 +11,27 @@
                     #:line_break_length natural?
                     #:font_size (or/c 'normal 'big 'small)
                     ) any)]
-          [detail-h1 (-> string? void?)]
-          [detail-h2 (-> string? void?)]
-          [detail-h3 (-> string? void?)]
-          [detail-line (->*
-                        (procedure?)
-                        (
-                         #:line_break_length natural?
-                         #:font_size (or/c 'normal 'big 'small)
-                         ) void?)]
-          [detail-line-add-item (-> string? void?)]
           [detail-page (->*
                         (procedure?)
                         (
                          #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) any)]
+          [detail-h1 (-> string? void?)]
+          [detail-h2 (-> string? void?)]
+          [detail-h3 (-> string? void?)]
+          [detail-line (->*
+                        (string?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) void?)]
+          [detail-list (->*
+                        (procedure?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) void?)]
+          [detail-row (-> procedure? void?)]
+          [detail-add-col (-> string? void?)]
           ))

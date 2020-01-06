@@ -18,19 +18,30 @@
                        [(DETAIL-TITLE? rec)
                         (printf "DETAIL-TITLE:[~a][~a]\n" (DETAIL-TITLE-level rec) (DETAIL-TITLE-data rec))]
                        [(DETAIL-LINE? rec)
-                        (printf "DETAIL-LINE:[~a][~a]\n"
+                        (printf "DETAIL-LINE:[~a][~a][~a]\n"
+                                (DETAIL-LINE-line rec)
+                                (DETAIL-LINE-line_break_length rec)
+                                (DETAIL-LINE-font_size rec))]
+                       [(DETAIL-LIST? rec)
+                        (printf "DETAIL-LIST:[~a][~a]\n"
                                 (DETAIL-LINE-line_break_length rec)
                                 (DETAIL-LINE-font_size rec))
-                        (let loop-item ([items (DETAIL-LINE-items rec)]
-                                        [items_length (DETAIL-PAGE-items_length page)]
-                                        [index 1])
-                          (when (not (null? items))
-                            (printf "[~a][~a][~a] "
-                                    (~a #:min-width 5 index)
-                                    (~a #:min-width 5 (car items_length))
-                                    (~a #:min-width (car items_length) (car items)))
-                            (loop-item (cdr items) (cdr items_length) (add1 index))))
-                        (printf "\n")]
+                        (let loop-row ([rows (DETAIL-LIST-rows rec)]
+                                       [row_index 1])
+                          (when (not (null? rows))
+                                (printf "[~a] " (~a #:min-width 3 row_index))
+
+                                (let loop-col ([cols (DETAIL-ROW-cols (car rows))]
+                                               [cols_width (DETAIL-LIST-cols_width rec)]
+                                               [col_index 1])
+                                  (when (not (null? cols))
+                                        (printf "[~a][~a][~a] "
+                                                (~a #:min-width 3 col_index)
+                                                (~a #:min-width 3 (car cols_width))
+                                                (~a #:min-width (car cols_width) (car cols)))
+                                        (loop-col (cdr cols) (cdr cols_width) (add1 col_index))))
+                                (printf "\n")
+                                (loop-row (cdr rows) (add1 row_index))))]
                        ))
                     (loop-rec (cdr recs))))
             (printf "PAGE-END\n"))

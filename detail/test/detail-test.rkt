@@ -33,6 +33,18 @@
              (check-equal? (*line_break_length*) 3)
              (check-equal? (*font_size*) 'normal)))
 
+          (detail-list
+           #:line_break_length 4
+           #:font_size 'small
+           (lambda ()
+             (check-equal? (*line_break_length*) 4)
+             (check-equal? (*font_size*) 'small)
+             
+             (detail-line
+              (lambda ()
+                (check-equal? (*line_break_length*) 4)
+                (check-equal? (*font_size*) 'small)))))
+
           (check-equal? (*line_break_length*) 2)
           (check-equal? (*font_size*) 'big)
           ))

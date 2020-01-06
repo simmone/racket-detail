@@ -28,10 +28,14 @@
                    )]
           [struct DETAIL-LIST
                   (
-                   (cols (listof string?))
-                   (cols_length (listof natural?))
+                   (rows (listof DETAIL-ROW?))
+                   (cols_width (listof natural?))
                    (line_break_length natural?)
                    (font_size (or/c 'normal 'big 'small))
+                   )]
+          [struct DETAIL-ROW
+                  (
+                   (cols (listof string?))
                    )]
           ))
 
@@ -49,7 +53,6 @@
 (struct
  DETAIL-PAGE
  (
-  [cols_length #:mutable]
   [recs #:mutable]
   ))
 
@@ -71,8 +74,14 @@
 (struct
  DETAIL-LIST
  (
-  [cols #:mutable]
-  [cols_length #:mutable]
+  [rows #:mutable]
+  [cols_width #:mutable]
   [line_break_length #:mutable]
   [font_size #:mutable]
+  ))
+
+(struct
+ DETAIL-ROW
+ (
+  [cols #:mutable]
   ))

@@ -13,17 +13,20 @@
       #:font_size 'big
       (lambda ()
         (detail-h1 "Hello World!")
+        
+        (detail-line "Yes, one by one, day by day.")
 
-        (detail-line
+        (detail-list
          (lambda ()
-           (detail-line-add-item "123")
-           (detail-line-add-item "12345")
-           (detail-line-add-item "")))
+           (detail-row
+            (lambda ()
+              (detail-add-col "123")
+              (detail-add-col "12345")
+              (detail-add-col "1234567")))
 
-        (detail-line
-         (lambda ()
-           (detail-line-add-item "1")
-           (detail-line-add-item "123456")
-           (detail-line-add-item "12345678"))))))))
+           (detail-row
+            (lambda ()
+              (detail-add-col "12345")
+              (detail-add-col "123"))))))))))
 
 (test-raw)
