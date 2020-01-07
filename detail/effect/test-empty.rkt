@@ -1,10 +1,10 @@
 #lang racket
 
-(require "../../main.rkt")
+(require "../main.rkt")
 
 (define (test-empty)
   (detail
-   #:formats '(raw)
+   #:formats '(raw console)
    #:line_break_length 1
    #:font_size 'small
    (lambda ()
