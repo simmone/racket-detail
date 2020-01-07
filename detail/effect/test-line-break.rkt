@@ -24,8 +24,8 @@
             (lambda ()
               (detail-col "123")
               (detail-col "12345")
-              (detail-col "1234567890")
               (detail-col "12345678901")
+              (detail-col "123456789012345678901" #:width 10)
               ))
 
            (detail-row

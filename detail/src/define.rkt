@@ -35,7 +35,7 @@
           [struct DETAIL-ROW
                   (
                    (cols (listof string?))
-                   (tail_cols (listof (listof string?)))
+                   (tail_rows (listof (listof string?)))
                    )]
           ))
 
@@ -83,5 +83,5 @@
  DETAIL-ROW
  (
   [cols #:mutable]
-  [tail_cols #:mutable]
+  [tail_rows #:mutable]
   ))

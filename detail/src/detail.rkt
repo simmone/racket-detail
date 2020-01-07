@@ -128,7 +128,21 @@
             (lambda () (void))
             (lambda () (proc))
             (lambda ()
-              (set-DETAIL-LIST-rows! (*current_list*) `(,@(DETAIL-LIST-rows (*current_list*)) ,(*current_row*))))))))
+              (set-DETAIL-LIST-rows! (*current_list*) `(,@(DETAIL-LIST-rows (*current_list*)) ,(*current_row*)))
+              (let* ([tail_rows  (DETAIL-ROW-tail_rows (*current_row*))]
+                     [rows_count (apply max (map (lambda (items) (length items)) tail_rows))])
+                (let loop-tail ([count 0])
+                  (when (< count rows)
+                        (set-DETAIL-LIST-rows!
+                         (*current_list*)
+                         `(,@(DETAIL-LIST-rows (*current_list*))
+                           ,(let loop-col ([cols (list-ref tail_rows count)]
+                                           [result '()])
+                              (if (not (null? cols))
+                                  
+                           
+
+              )))))
 
 (define (detail-col val #:width [width 30])
   (when (*detail*)
@@ -139,7 +153,7 @@
 
           (set-DETAIL-ROW-cols! (*current_row*) `(,@(DETAIL-ROW-cols (*current_row*)) ,head_val))
           
-          (set-DETAIL-ROW-tail_cols! (*current_row*) `(,@(DETAIL-ROW-tail_cols (*current_row*)) ,tail_vals))
+          (set-DETAIL-ROW-tail_rows! (*current_row*) `(,@(DETAIL-ROW-tail_rows (*current_row*)) ,tail_vals))
           
           (let* ([cols (DETAIL-ROW-cols (*current_row*))]
                  [cols_width (DETAIL-LIST-cols_width (*current_list*))]
