@@ -4,15 +4,17 @@
 
 (define (test-line-break)
   (detail
-   #:formats '(raw console)
+   #:formats '(raw)
    #:line_break_length 1
    #:font_size 'small
    (lambda ()
      (detail-page
-      #:line_break_length 100
+      #:line_break_length 10
       #:font_size 'big
       (lambda ()
         (detail-h1 "Hello World!")
+
+        (detail-line "1234567890")
         
         (detail-line "Yes, one by one, day by day.")
 
@@ -20,13 +22,15 @@
          (lambda ()
            (detail-row
             (lambda ()
-              (detail-add-col "123")
-              (detail-add-col "12345")
-              (detail-add-col "1234567")))
+              (detail-col "123")
+              (detail-col "12345")
+              (detail-col "1234567890")
+              (detail-col "12345678901")
+              ))
 
            (detail-row
             (lambda ()
-              (detail-add-col "12345")
-              (detail-add-col "123"))))))))))
+              (detail-col "12345")
+              (detail-col "123"))))))))))
 
 (test-line-break)

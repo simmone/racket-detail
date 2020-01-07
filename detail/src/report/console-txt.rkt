@@ -28,8 +28,7 @@
                                 (printf "~a\n" (car loop_strs))
                                 (loop-split (cdr loop_strs))))))]
                        [(DETAIL-LIST? rec)
-                        (let* ([line_break_length (DETAIL-LIST-line_break_length rec)]
-                               [cols_width (DETAIL-LIST-cols_width rec)]
+                        (let* ([cols_width (DETAIL-LIST-cols_width rec)]
                                [prefix_length
                                 (if (<= (length cols_width) 1)
                                     0
@@ -39,20 +38,12 @@
                               (let* ([row (car rows)]
                                      [cols (DETAIL-ROW-cols row)])
                                 (let loop-cols ([loop_cols cols]
-                                                [loop_cols_width cols_width]
-                                                [index 1])
+                                                [loop_cols_width cols_width])
                                   (when (not (null? loop_cols))
                                     (if (= (length loop_cols) 1)
-                                        (if (> line_break_length prefix_length)
-                                            (let ([strs (zip-string (car loop_cols) (- line_break_length prefix_length))])
-                                              (printf "~a\n" (~a #:min-width (car loop_cols_width) (car strs)))
-                                              (let loop-split ([loop_strs (cdr strs)])
-                                                (when (not (null? loop_strs))
-                                                      (printf "~a\n" (~a #:min-width prefix_length #:pad-string " " #:align 'right (car loop_strs)))
-                                                      (loop-split (cdr loop_strs)))))
-                                            (printf "~a\n" (~a #:min-width (car loop_cols_width) (car loop_cols))))
-                                        (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols))))
-                                    (loop-cols (cdr loop_cols) (cdr loop_cols_width) (add1 index)))))
+                                        (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols)))
+                                        (printf "~a\n" (~a #:min-width (car loop_cols_width) (car loop_cols))))
+                                    (loop-cols (cdr loop_cols) (cdr loop_cols_width)))))
                               (loop-row (cdr rows)))))]))
                     (loop-rec (cdr recs))))
           (printf "----\n")

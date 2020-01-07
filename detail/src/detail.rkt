@@ -1,6 +1,7 @@
 #lang racket
 
 (require "define.rkt")
+(require "lib.rkt")
 (require "report/report.rkt")
 
 (provide (contract-out
@@ -30,11 +31,10 @@
           [detail-list (->*
                         (procedure?)
                         (
-                         #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) void?)]
           [detail-row (-> procedure? void?)]
-          [detail-add-col (-> string? void?)]
+          [detail-col (->* (string?) (#:width natural?) void?)]
           ))
 
 (define (detail
@@ -108,11 +108,10 @@
 
 (define (detail-list
          proc
-         #:line_break_length [line_break_length (*line_break_length*)]
          #:font_size [font_size (*font_size*)])
   (when (*detail*)
       (parameterize
-          ([*current_list* (DETAIL-LIST '() '() line_break_length font_size)])
+          ([*current_list* (DETAIL-LIST '() '() font_size)])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
@@ -120,30 +119,38 @@
               (detail-add-rec (*current_list*)))))))
 
 (define *current_row* (make-parameter #f))
+(define *current_tail_cols* (make-parameter #f))
 
 (define (detail-row proc)
   (when (*detail*)
       (parameterize
-          ([*current_row* (DETAIL-ROW '())])
+          ([*current_row* (DETAIL-ROW '())]
+           [*current_tail_cols* '()])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
             (lambda ()
               (set-DETAIL-LIST-rows! (*current_list*) `(,@(DETAIL-LIST-rows (*current_list*)) ,(*current_row*))))))))
 
-(define (detail-add-col val)
+(define (detail-col val #:width [width 30])
   (when (*detail*)
-        (set-DETAIL-ROW-cols! (*current_row*) `(,@(DETAIL-ROW-cols (*current_row*)) ,val))
+        (let* ([split_vals (zip-string val width)]
+               [head_val (car split_vals)]
+               [head_val_width (string-length head_val)]
+               [tail_vals (cdr split_vals)])
 
-        (let* ([cols (DETAIL-ROW-cols (*current_row*))]
-               [cols_width (DETAIL-LIST-cols_width (*current_list*))]
-               [val_length (string-length val)]
-               [val_pos (sub1 (length cols))])
-         (if (< (length cols_width) (length cols))
-              (set-DETAIL-LIST-cols_width!
-               (*current_list*)
-               `(,@(DETAIL-LIST-cols_width (*current_list*)) ,val_length))
-              (when (> val_length (list-ref cols_width val_pos))
+          (set-DETAIL-ROW-cols! (*current_row*) `(,@(DETAIL-ROW-cols (*current_row*)) ,head_val))
+          
+          (set-DETAIL-ROW-tail_cols! (*current_row*) `(,@(DETAIL-ROW-tail_cols (*current_row*)) ,tail_vals))
+          
+          (let* ([cols (DETAIL-ROW-cols (*current_row*))]
+                 [cols_width (DETAIL-LIST-cols_width (*current_list*))]
+                 [val_pos (sub1 (length cols))])
+            (if (< (length cols_width) (length cols))
+                (set-DETAIL-LIST-cols_width!
+                 (*current_list*)
+                 `(,@(DETAIL-LIST-cols_width (*current_list*)) ,head_val_width))
+              (when (> head_val_width (list-ref cols_width val_pos))
                     (set-DETAIL-LIST-cols_width!
                      (*current_list*)
-                     (list-set cols_width val_pos val_length)))))))
+                     (list-set cols_width val_pos head_val_width))))))))

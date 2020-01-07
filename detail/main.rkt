@@ -29,9 +29,8 @@
           [detail-list (->*
                         (procedure?)
                         (
-                         #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) void?)]
           [detail-row (-> procedure? void?)]
-          [detail-add-col (-> string? void?)]
+          [detail-col (->* (string?) (#:width natural?) void?)]
           ))

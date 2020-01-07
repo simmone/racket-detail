@@ -30,12 +30,12 @@
                   (
                    (rows (listof DETAIL-ROW?))
                    (cols_width (listof natural?))
-                   (line_break_length natural?)
                    (font_size (or/c 'normal 'big 'small))
                    )]
           [struct DETAIL-ROW
                   (
                    (cols (listof string?))
+                   (tail_cols (listof (listof string?)))
                    )]
           ))
 
@@ -76,7 +76,6 @@
  (
   [rows #:mutable]
   [cols_width #:mutable]
-  [line_break_length #:mutable]
   [font_size #:mutable]
   ))
 
@@ -84,4 +83,5 @@
  DETAIL-ROW
  (
   [cols #:mutable]
+  [tail_cols #:mutable]
   ))

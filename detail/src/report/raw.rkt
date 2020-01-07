@@ -23,9 +23,7 @@
                                 (DETAIL-LINE-line_break_length rec)
                                 (DETAIL-LINE-font_size rec))]
                        [(DETAIL-LIST? rec)
-                        (printf "DETAIL-LIST:[~a][~a]\n"
-                                (DETAIL-LIST-line_break_length rec)
-                                (DETAIL-LIST-font_size rec))
+                        (printf "DETAIL-LIST:[~a]\n" (DETAIL-LIST-font_size rec))
                         (let loop-row ([rows (DETAIL-LIST-rows rec)]
                                        [row_index 1])
                           (when (not (null? rows))
