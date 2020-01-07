@@ -119,13 +119,11 @@
               (detail-add-rec (*current_list*)))))))
 
 (define *current_row* (make-parameter #f))
-(define *current_tail_cols* (make-parameter #f))
 
 (define (detail-row proc)
   (when (*detail*)
       (parameterize
-          ([*current_row* (DETAIL-ROW '())]
-           [*current_tail_cols* '()])
+          ([*current_row* (DETAIL-ROW '() '())])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))

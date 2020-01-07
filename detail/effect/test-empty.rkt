@@ -13,7 +13,6 @@
       #:font_size 'big
       (lambda ()
         (detail-list
-         #:line_break_length 4
          #:font_size 'small
          (lambda ()
            (detail-row

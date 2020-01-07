@@ -20,13 +20,13 @@
          (lambda ()
            (detail-row
             (lambda ()
-              (detail-add-col "123")
-              (detail-add-col "12345")
-              (detail-add-col "1234567")))
+              (detail-col "123")
+              (detail-col "12345")
+              (detail-col "1234567")))
 
            (detail-row
             (lambda ()
-              (detail-add-col "12345")
-              (detail-add-col "123"))))))))))
+              (detail-col "12345")
+              (detail-col "123"))))))))))
 
 (test-basic)
