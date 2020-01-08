@@ -130,7 +130,7 @@
             (lambda ()
               (set-DETAIL-LIST-rows! (*current_list*) `(,@(DETAIL-LIST-rows (*current_list*)) ,(*current_row*)))
               (let* ([tail_rows  (DETAIL-ROW-tail_rows (*current_row*))]
-                     [rows_count (apply max (map (lambda (items) (length items)) tail_rows))]
+                     [rows_count (if (null? tail_rows) 0 (apply max (map (lambda (items) (length items)) tail_rows)))]
                      [cols_count (length tail_rows)])
                 (printf "~a\n" tail_rows)
                 (printf "~a,~a\n" rows_count cols_count)
@@ -140,18 +140,24 @@
                    ,@(let loop-tail ([row_count 0]
                                      [tail_row_list '()])
                        (if (< row_count rows_count)
-                           (let ([cols (list-ref tail_rows row_count)])
-                             (loop-tail (add1 row_count)
-                                      (cons
-                                       (let loop-col ([col_count 0]
-                                                      [row '()])
-                                         (if (< col_count cols_count)
-                                             (loop-col
-                                              (add1 col_count)
-                                              (cons (if (< col_count (length cols)) (list-ref cols col_count) "") row))
-                                             (reverse row)))
-                                       tail_row_list)))
-                           (DETAIL-ROW (reverse tail_row_list) '())))))))))))
+                           (loop-tail
+                            (add1 row_count)
+                            (cons
+                             (DETAIL-ROW
+                              (let loop-col ([col_count 0]
+                                             [row '()])
+                                (if (< col_count cols_count)
+                                    (loop-col
+                                     (add1 col_count)
+                                     (cons (if
+                                            (< col_count (length cols))
+                                            (list-ref cols col_count)
+                                            "")
+                                           row))
+                                    (reverse row)))
+                              '())
+                             tail_row_list))
+                       (reverse tail_row_list)))))))))))
 
 (define (detail-col val #:width [width 30])
   (when (*detail*)
