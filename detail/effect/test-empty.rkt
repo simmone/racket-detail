@@ -4,7 +4,7 @@
 
 (define (test-empty)
   (detail
-   #:formats '(raw console)
+   #:formats '(raw console "empty.pdf")
    #:line_break_length 1
    #:font_size 'small
    (lambda ()

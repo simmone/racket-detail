@@ -40,8 +40,7 @@
         (lambda ()
           (let loop-page ([loop_pages pages])
             (when (not (null? loop_pages))
-              (let* ([page (car loop_pages)]
-                     [prefix_length (DETAIL-PAGE-prefix_length page)])
+              (let* ([page (car loop_pages)])
                 (dynamic-wind
                     (lambda () (send dc start-page))
                     (lambda ()
@@ -64,10 +63,30 @@
                              [(DETAIL-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec (cdr recs) (draw-lines dc 0 loop_line rec))]
-                             [(DETAIL-PREFIX-LINE? rec)
+                             [(DETAIL-LIST? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                              (let ([start_line (draw-line dc (DETAIL-PREFIX-LINE-prefix rec) 0 loop_line)])
-                                (loop-rec (cdr recs) (draw-lines dc (* prefix_length 10) (- start_line LINE_HEIGHT) (DETAIL-PREFIX-LINE-line rec))))])))))
+                              (let loop ([strs
+                                          (let loop-row ([rows (DETAIL-LIST-rows rec)]
+                                                         [result_list '()])
+                                            (if (not (null? rows))
+                                              (loop-row
+                                               (cdr rows)
+                                               (cons
+                                                (with-output-to-string
+                                                  (lambda ()
+                                                    (let* ([row (car rows)]
+                                                           [cols (DETAIL-ROW-cols row)])
+                                                      (let loop-cols ([loop_cols cols]
+                                                                      [loop_cols_width cols_width])
+                                                        (when (not (null? loop_cols))
+                                                          (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols)))
+                                                          (loop-cols (cdr loop_cols) (cdr loop_cols_width)))))))
+                                                result_list))
+                                              (reverse result_list)))]
+                                         [y_pos start_y_pos])
+                                (if (not (null? strs))
+                                    (loop (cdr strs) (draw-line dc (car strs) x_pos 0))
+                                    y_pos))])))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
         (lambda ()

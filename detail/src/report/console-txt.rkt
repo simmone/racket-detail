@@ -28,22 +28,18 @@
                                 (printf "~a\n" (car loop_strs))
                                 (loop-split (cdr loop_strs))))))]
                        [(DETAIL-LIST? rec)
-                        (let* ([cols_width (DETAIL-LIST-cols_width rec)]
-                               [prefix_length
-                                (if (<= (length cols_width) 1)
-                                    0
-                                    (foldr + 0 (cdr (reverse cols_width))))])
+                        (let* ([cols_width (DETAIL-LIST-cols_width rec)])
                           (let loop-row ([rows (DETAIL-LIST-rows rec)])
                             (when (not (null? rows))
                               (let* ([row (car rows)]
                                      [cols (DETAIL-ROW-cols row)])
                                 (let loop-cols ([loop_cols cols]
                                                 [loop_cols_width cols_width])
-                                  (when (not (null? loop_cols))
-                                    (if (= (length loop_cols) 1)
-                                        (printf "~a\n" (~a #:min-width (car loop_cols_width) (car loop_cols)))
-                                        (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols))))
-                                    (loop-cols (cdr loop_cols) (cdr loop_cols_width)))))
+                                  (if (not (null? loop_cols))
+                                      (begin
+                                        (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols)))
+                                        (loop-cols (cdr loop_cols) (cdr loop_cols_width)))
+                                      (printf "\n"))))
                               (loop-row (cdr rows)))))]))
                     (loop-rec (cdr recs))))
           (printf "----\n")
