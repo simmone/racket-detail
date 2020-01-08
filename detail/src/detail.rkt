@@ -147,14 +147,15 @@
                               (let loop-col ([col_count 0]
                                              [row '()])
                                 (if (< col_count cols_count)
-                                    (loop-col
-                                     (add1 col_count)
-                                     (cons (if
-                                            (< col_count (length cols))
-                                            (list-ref cols col_count)
-                                            "")
-                                           row))
-                                    (reverse row)))
+                                    (let ([cols (list-ref tail_rows col_count)])
+                                      (loop-col
+                                       (add1 col_count)
+                                       (cons (if
+                                              (< row_count (length cols))
+                                              (list-ref cols row_count)
+                                              "")
+                                             row)))
+                                      (reverse row)))
                               '())
                              tail_row_list))
                        (reverse tail_row_list)))))))))))

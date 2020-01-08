@@ -4,7 +4,7 @@
 
 (define (test-line-break)
   (detail
-   #:formats '(raw)
+   #:formats '(raw console)
    #:line_break_length 1
    #:font_size 'small
    (lambda ()
@@ -24,7 +24,7 @@
             (lambda ()
               (detail-col "123")
               (detail-col "12345")
-              (detail-col "12345678901")
+              (detail-col "12345678901" #:width 3)
               (detail-col "123456789012345678901" #:width 10)
               ))
 
