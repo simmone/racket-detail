@@ -84,9 +84,9 @@
 
 (define (rows->cols rows)
   (let ([cols_count (length rows)]
-        [rows_count (if (null? tail_rows) 0 (apply max (map (lambda (items) (length items)) tail_rows)))])
+        [rows_count (if (null? rows) 0 (apply max (map (lambda (items) (length items)) rows)))])
     (let loop ([row_count 0]
-               [cols '()])
+               [result_cols '()])
       (if (< row_count rows_count)
           (loop
            (add1 row_count)
@@ -94,12 +94,14 @@
             (let loop-col ([col_count 0]
                            [row '()])
               (if (< col_count cols_count)
-                                    (let ([cols (list-ref tail_rows col_count)])
-                                      (loop-col
-                                       (add1 col_count)
-                                       (cons (if
-                                              (< row_count (length cols))
-                                              (list-ref cols row_count)
-                                              "")
-                                             row)))
-                                      (reverse row)))
+                  (let ([cols (list-ref rows col_count)])
+                    (loop-col
+                     (add1 col_count)
+                     (cons (if
+                            (< row_count (length cols))
+                            (list-ref cols row_count)
+                            "")
+                           row)))
+                  (reverse row)))
+            result_cols))
+          (reverse result_cols)))))
