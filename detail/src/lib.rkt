@@ -82,3 +82,23 @@
                     (loop (cdr loop_list) (add1 print_count) (add1 item_number) #f #t)))))
       (printf "}"))))
 
+(define (rows->cols rows)
+  (let loop-tail ([row_count 0]
+                  [tail_row_list '()])
+                       (if (< row_count rows_count)
+                           (loop-tail
+                            (add1 row_count)
+                            (cons
+                             (DETAIL-ROW
+                              (let loop-col ([col_count 0]
+                                             [row '()])
+                                (if (< col_count cols_count)
+                                    (let ([cols (list-ref tail_rows col_count)])
+                                      (loop-col
+                                       (add1 col_count)
+                                       (cons (if
+                                              (< row_count (length cols))
+                                              (list-ref cols row_count)
+                                              "")
+                                             row)))
+                                      (reverse row)))

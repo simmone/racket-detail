@@ -62,37 +62,31 @@
                                 (loop-rec (cdr recs) (+ H3_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
                              [(DETAIL-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                              (loop-rec (cdr recs) (draw-lines dc 0 loop_line rec))]
+                              (loop-rec (cdr recs) (draw-lines dc 0 loop_line (zip-string (DETAIL-LINE-line rec) (DETAIL-LINE-line_break_length rec))))]
                              [(DETAIL-LIST? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                              (let loop ([strs
-                                          (let loop-row ([rows (DETAIL-LIST-rows rec)]
-                                                         [result_list '()])
-                                            (if (not (null? rows))
-                                              (loop-row
-                                               (cdr rows)
-                                               (cons
-                                                (with-output-to-string
-                                                  (lambda ()
-                                                    (let* ([row (car rows)]
-                                                           [cols (DETAIL-ROW-cols row)])
-                                                      (let loop-cols ([loop_cols cols]
-                                                                      [loop_cols_width cols_width])
-                                                        (when (not (null? loop_cols))
-                                                          (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols)))
-                                                          (loop-cols (cdr loop_cols) (cdr loop_cols_width)))))))
-                                                result_list))
-                                              (reverse result_list)))]
-                                         [y_pos start_y_pos])
-                                (if (not (null? strs))
-                                    (loop (cdr strs) (draw-line dc (car strs) x_pos 0))
-                                    y_pos))])))))
+                              (loop-rec
+                               (cdr recs)
+                               (let ([cols (rows->cols (DETAIL-LIST-rows rec))]
+                                     [cols_width (DETAIL-LIST-cols_width rec)])
+                                 (let loop-cols ([loop_cols cols]
+                                                 [loop_widths cols_width]
+                                                 [loop_x_pos 0]
+                                                 [loop_y_pos loop_line])
+                                   (if (not (null? loop_cols))
+                                       (loop-cols
+                                        (cdr loop_cols)
+                                        (cdr loop_widths)
+                                        (+ loop_x_pos (* (car loop_width) 10))
+                                        (+ loop_y_pos
+                                           (draw-lines dc loop_x_pos loop_y_pos cols)))
+                                       loop_y_pos))))])))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
         (lambda ()
           (send dc end-doc)))))
 
-(define (draw-lines dc start_x_pos start_y_pos rec)
+(define (draw-lines dc start_x_pos start_y_pos lines)
   (cond
    [(eq? (DETAIL-LINE-font_size rec) 'big)
     (send dc set-font (make-font #:size BIG_FONT_SIZE))]
@@ -101,10 +95,10 @@
    [else
     (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])
 
-  (let loop ([strs (zip-string (DETAIL-LINE-data rec) (DETAIL-LINE-line_break_length rec))]
+  (let loop ([loop_lines lines]
              [y_pos start_y_pos])
-    (if (not (null? strs))
-        (loop (cdr strs) (draw-line dc (car strs) start_x_pos y_pos))
+    (if (not (null? loop_lines))
+        (loop (cdr loop_lines) (draw-line dc (car loop_lines) start_x_pos y_pos))
         y_pos)))
 
 (define (draw-line dc str x_pos y_pos)
