@@ -4,6 +4,7 @@
           [zip-string (-> string? (and/c natural? (>/c 0)) (listof string?))]
           [display-double-list (->* (list? list?) (natural? natural?) string?)]
           [display-list (->* (list?) (natural? natural?) string?)]
+          [rows->cols (->* ((listof (listof any/c))) (#:fill any/c) (listof (listof any/c)))]
           ))
 
 (define (zip-string str line_count)
@@ -82,7 +83,7 @@
                     (loop (cdr loop_list) (add1 print_count) (add1 item_number) #f #t)))))
       (printf "}"))))
 
-(define (rows->cols rows)
+(define (rows->cols rows #:fill [fill #f])
   (let ([cols_count (length rows)]
         [rows_count (if (null? rows) 0 (apply max (map (lambda (items) (length items)) rows)))])
     (let loop ([row_count 0]
@@ -100,7 +101,7 @@
                      (cons (if
                             (< row_count (length cols))
                             (list-ref cols row_count)
-                            "")
+                            fill)
                            row)))
                   (reverse row)))
             result_cols))

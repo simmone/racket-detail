@@ -62,35 +62,43 @@
                                 (loop-rec (cdr recs) (+ H3_HEIGHT (draw-line dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
                              [(DETAIL-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-                              (loop-rec (cdr recs) (draw-lines dc 0 loop_line (zip-string (DETAIL-LINE-line rec) (DETAIL-LINE-line_break_length rec))))]
+                              (loop-rec
+                               (cdr recs)
+                               (draw-lines
+                                dc
+                                0
+                                loop_line
+                                (zip-string (DETAIL-LINE-line rec) (DETAIL-LINE-line_break_length rec))
+                                (DETAIL-LINE-font_size rec)))]
                              [(DETAIL-LIST? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec
                                (cdr recs)
-                               (let ([cols (rows->cols (DETAIL-LIST-rows rec))]
+                               (let ([cols (rows->cols (map (lambda (row) (DETAIL-ROW-cols row)) (DETAIL-LIST-rows rec)) #:fill "")]
                                      [cols_width (DETAIL-LIST-cols_width rec)])
                                  (let loop-cols ([loop_cols cols]
                                                  [loop_widths cols_width]
                                                  [loop_x_pos 0]
-                                                 [loop_y_pos loop_line])
+                                                 [max_y_pos loop_line])
                                    (if (not (null? loop_cols))
                                        (loop-cols
                                         (cdr loop_cols)
                                         (cdr loop_widths)
-                                        (+ loop_x_pos (* (car loop_width) 10))
-                                        (+ loop_y_pos
-                                           (draw-lines dc loop_x_pos loop_y_pos cols)))
-                                       loop_y_pos))))])))))
+                                        (+ loop_x_pos (* (car loop_widths) 10))
+                                        (max
+                                         max_y_pos
+                                         (draw-lines dc loop_x_pos loop_line (car loop_cols) (DETAIL-LIST-font_size rec))))
+                                       max_y_pos))))])))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
         (lambda ()
           (send dc end-doc)))))
 
-(define (draw-lines dc start_x_pos start_y_pos lines)
+(define (draw-lines dc start_x_pos start_y_pos lines font_size)
   (cond
-   [(eq? (DETAIL-LINE-font_size rec) 'big)
+   [(eq? font_size 'big)
     (send dc set-font (make-font #:size BIG_FONT_SIZE))]
-   [(eq? (DETAIL-LINE-font_size rec) 'small)
+   [(eq? font_size 'small)
     (send dc set-font (make-font #:size SMALL_FONT_SIZE))]
    [else
     (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])

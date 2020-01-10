@@ -4,7 +4,7 @@
 
 (define (test-basic)
   (detail
-   #:formats '(raw console)
+   #:formats '(raw console "basic.pdf")
    #:line_break_length 1
    #:font_size 'small
    (lambda ()

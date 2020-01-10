@@ -128,37 +128,11 @@
             (lambda () (void))
             (lambda () (proc))
             (lambda ()
-              (set-DETAIL-LIST-rows! (*current_list*) `(,@(DETAIL-LIST-rows (*current_list*)) ,(*current_row*)))
-              (let* ([tail_rows  (DETAIL-ROW-tail_rows (*current_row*))]
-                     [rows_count (if (null? tail_rows) 0 (apply max (map (lambda (items) (length items)) tail_rows)))]
-                     [cols_count (length tail_rows)])
-                (printf "~a\n" tail_rows)
-                (printf "~a,~a\n" rows_count cols_count)
-                (set-DETAIL-LIST-rows!
-                 (*current_list*)
-                 `(,@(DETAIL-LIST-rows (*current_list*))
-                   ,@(let loop-tail ([row_count 0]
-                                     [tail_row_list '()])
-                       (if (< row_count rows_count)
-                           (loop-tail
-                            (add1 row_count)
-                            (cons
-                             (DETAIL-ROW
-                              (let loop-col ([col_count 0]
-                                             [row '()])
-                                (if (< col_count cols_count)
-                                    (let ([cols (list-ref tail_rows col_count)])
-                                      (loop-col
-                                       (add1 col_count)
-                                       (cons (if
-                                              (< row_count (length cols))
-                                              (list-ref cols row_count)
-                                              "")
-                                             row)))
-                                      (reverse row)))
-                              '())
-                             tail_row_list))
-                       (reverse tail_row_list)))))))))))
+              (set-DETAIL-LIST-rows! 
+               (*current_list*)
+               `(,@(DETAIL-LIST-rows (*current_list*))
+                 ,(*current_row*)
+                 ,@(rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill ""))))))))
 
 (define (detail-col val #:width [width 30])
   (when (*detail*)
