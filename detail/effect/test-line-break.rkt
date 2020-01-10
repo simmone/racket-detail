@@ -4,7 +4,7 @@
 
 (define (test-line-break)
   (detail
-   #:formats '(raw console)
+   #:formats '(raw console "line_break.pdf")
    #:line_break_length 1
    #:font_size 'small
    (lambda ()

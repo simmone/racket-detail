@@ -132,7 +132,7 @@
                (*current_list*)
                `(,@(DETAIL-LIST-rows (*current_list*))
                  ,(*current_row*)
-                 ,@(rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill ""))))))))
+                 ,@(map (lambda (rec) (DETAIL-ROW rec '())) (rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill "")))))))))
 
 (define (detail-col val #:width [width 30])
   (when (*detail*)

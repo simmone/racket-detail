@@ -84,7 +84,7 @@
                                        (loop-cols
                                         (cdr loop_cols)
                                         (cdr loop_widths)
-                                        (+ loop_x_pos (* (car loop_widths) 10))
+                                        (+ loop_x_pos (* (car loop_widths) 20))
                                         (max
                                          max_y_pos
                                          (draw-lines dc loop_x_pos loop_line (car loop_cols) (DETAIL-LIST-font_size rec))))
