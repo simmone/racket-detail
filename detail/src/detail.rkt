@@ -32,7 +32,7 @@
                         (procedure?)
                         (
                          #:font_size (or/c 'normal 'big 'small)
-                         ) void?)]
+                         ) any)]
           [detail-row (-> procedure? void?)]
           [detail-col (->* (string?) (#:width natural?) void?)]
           ))
@@ -109,14 +109,15 @@
 (define (detail-list
          proc
          #:font_size [font_size (*font_size*)])
-  (when (*detail*)
+  (if (*detail*)
       (parameterize
           ([*current_list* (DETAIL-LIST '() '() font_size)])
         (dynamic-wind
             (lambda () (void))
             (lambda () (proc))
             (lambda ()
-              (detail-add-rec (*current_list*)))))))
+              (detail-add-rec (*current_list*)))))
+      (proc)))
 
 (define *current_row* (make-parameter #f))
 

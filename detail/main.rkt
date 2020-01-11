@@ -30,7 +30,7 @@
                         (procedure?)
                         (
                          #:font_size (or/c 'normal 'big 'small)
-                         ) void?)]
+                         ) any)]
           [detail-row (-> procedure? void?)]
           [detail-col (->* (string?) (#:width natural?) void?)]
           ))

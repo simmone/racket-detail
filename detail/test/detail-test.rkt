@@ -51,8 +51,37 @@
 
        (check-equal? (*line_break_length*) 1)
        (check-equal? (*font_size*) 'small)
-       ))
+       )))
+
+    (test-case
+     "test-exception"
+
+     (check-equal?
+      (detail
+       #:formats #f
+       (lambda ()
+         (detail-page
+          (lambda ()
+            (detail-list
+             (lambda ()
+               "ok"))))))
+      "ok")
+
+     (check-equal?
+      (detail
+       #:exception_value "error"
+       (lambda ()
+         "ok"))
+      "ok")
+     
+     (check-equal?
+      (detail
+       #:exception_value "error"
+       (lambda ()
+         (/ 3 0)))
+      "error")
     )
+
    ))
 
 (run-tests test-detail)
