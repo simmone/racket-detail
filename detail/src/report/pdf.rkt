@@ -106,20 +106,27 @@
   
   (let loop-row ([loop_rows rows]
                  [y_pos start_y_pos])
-    (printf "y: ~a\n" y_pos)
     (if (not (null? loop_rows))
         (loop-row
          (cdr loop_rows)
-         (let loop-col ([loop_cols (DETAIL-ROW-cols (car loop_rows))]
-                        [loop_widths cols_width]
-                        [x_pos start_x_pos]
-                        [next_y_pos y_pos])
-           (printf "x: ~a next_y_pos: ~a\n" x_pos next_y_pos)
-           (if (not (null? loop_cols))
-               (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) 20))
-                         (draw-str dc (car loop_cols) x_pos y_pos))
-               next_y_pos)))
+         (draw-row dc (car loop_rows) start_x_pos y_pos cols_width))
         y_pos)))
+
+(define (draw-row dc row start_x_pos y_pos cols_width)
+  (let ([start_y_pos y_pos])
+    (when (> y_pos PAGE_LENGTH)
+      (send dc end-page)
+      (send dc start-page)
+      (set! start_y_pos 0))
+
+    (let loop-col ([loop_cols (DETAIL-ROW-cols row)]
+                   [loop_widths cols_width]
+                   [x_pos start_x_pos]
+                   [next_y_pos y_pos])
+      (if (not (null? loop_cols))
+          (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) 20))
+                    (draw-str dc (car loop_cols) x_pos start_y_pos))
+          next_y_pos))))
 
 (define (draw-str dc str x_pos y_pos)
   (if (> y_pos PAGE_LENGTH)
