@@ -10,17 +10,21 @@
           ))
 
 (define PAGE_WIDTH 595)
-(define PAGE_HEIGHT 842)
-(define PAGE_LENGTH 1000)
+(define PAGE_HEIGHT 1000)
+
 (define NORMAL_FONT_SIZE 14)
 (define BIG_FONT_SIZE 18)
 (define SMALL_FONT_SIZE 10)
+
 (define H1_FONT_SIZE 36)
 (define H1_HEIGHT 40)
+
 (define H2_FONT_SIZE 24)
 (define H2_HEIGHT 30)
+
 (define H3_FONT_SIZE 20)
 (define H3_HEIGHT 10)
+
 (define LINE_HEIGHT 30)
 
 (define (detail-report-pdf pdf_file pages)
@@ -114,7 +118,7 @@
 
 (define (draw-row dc row start_x_pos y_pos cols_width)
   (let ([start_y_pos y_pos])
-    (when (> y_pos PAGE_LENGTH)
+    (when (> y_pos PAGE_HEIGHT)
       (send dc end-page)
       (send dc start-page)
       (set! start_y_pos 0))
@@ -129,7 +133,7 @@
           next_y_pos))))
 
 (define (draw-str dc str x_pos y_pos)
-  (if (> y_pos PAGE_LENGTH)
+  (if (> y_pos PAGE_HEIGHT)
       (begin
         (send dc end-page)
         (send dc start-page)
