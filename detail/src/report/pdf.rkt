@@ -12,18 +12,23 @@
 (define PAGE_WIDTH 595)
 (define PAGE_HEIGHT 900)
 
-(define NORMAL_FONT_SIZE 14)
 (define BIG_FONT_SIZE 18)
+(define BIG_HEIGHT 22)
+
+(define NORMAL_FONT_SIZE 14)
+(define NORMAL_HEIGHT 18)
+
 (define SMALL_FONT_SIZE 10)
+(define SMALL_HEIGHT 14)
 
 (define H1_FONT_SIZE 36)
-(define H1_HEIGHT 40)
+(define H1_HEIGHT 44)
 
-(define H2_FONT_SIZE 24)
-(define H2_HEIGHT 30)
+(define H2_FONT_SIZE 30)
+(define H2_HEIGHT 36)
 
-(define H3_FONT_SIZE 20)
-(define H3_HEIGHT 10)
+(define H3_FONT_SIZE 24)
+(define H3_HEIGHT 30)
 
 (define LINE_HEIGHT 18)
 
@@ -57,14 +62,13 @@
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
                                 (send dc set-font (make-font #:size H1_FONT_SIZE))
-                                (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line)
-                                (loop-rec (cdr recs) (+ H1_HEIGHT loop_line))]
+                                (loop-rec (cdr recs) (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line H1_HEIGHT))]
                                [(eq? (DETAIL-TITLE-level rec) 'h2)
                                 (send dc set-font (make-font #:size H2_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ H2_HEIGHT (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line)))]
+                                (loop-rec (cdr recs) (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line H2_HEIGHT))]
                                [(eq? (DETAIL-TITLE-level rec) 'h3)
                                 (send dc set-font (make-font #:size H3_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ H3_HEIGHT (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line)))])]
+                                (loop-rec (cdr recs) (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line H3_HEIGHT))])]
                              [(DETAIL-LINE? rec)
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec
@@ -86,19 +90,23 @@
           (send dc end-doc)))))
 
 (define (draw-lines dc start_x_pos start_y_pos lines font_size)
-  (cond
-   [(eq? font_size 'big)
-    (send dc set-font (make-font #:size BIG_FONT_SIZE))]
-   [(eq? font_size 'small)
-    (send dc set-font (make-font #:size SMALL_FONT_SIZE))]
-   [else
-    (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])
+  (let ([height
+         (cond
+          [(eq? font_size 'big)
+           (send dc set-font (make-font #:size BIG_FONT_SIZE))
+           BIG_HEIGHT]
+          [(eq? font_size 'small)
+           (send dc set-font (make-font #:size SMALL_FONT_SIZE))
+           SMALL_HEIGHT]
+          [else
+           (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
+           NORMAL_HEIGHT])])
 
-  (let loop ([loop_lines lines]
-             [y_pos start_y_pos])
-    (if (not (null? loop_lines))
-        (loop (cdr loop_lines) (draw-str dc (car loop_lines) start_x_pos y_pos))
-        y_pos)))
+    (let loop ([loop_lines lines]
+               [y_pos start_y_pos])
+      (if (not (null? loop_lines))
+          (loop (cdr loop_lines) (draw-str dc (car loop_lines) start_x_pos y_pos height))
+          y_pos))))
 
 (define (draw-rows dc start_x_pos start_y_pos cols_width rows font_size)
   (cond
@@ -133,13 +141,13 @@
                     (draw-str dc (car loop_cols) x_pos start_y_pos))
           next_y_pos))))
 
-(define (draw-str dc str x_pos y_pos)
+(define (draw-str dc str x_pos y_pos height)
   (if (> y_pos PAGE_HEIGHT)
       (begin
         (send dc end-page)
         (send dc start-page)
         (send dc draw-text str x_pos 0)
-        LINE_HEIGHT)
+        height)
       (begin
         (send dc draw-text str x_pos y_pos)
-        (+ y_pos LINE_HEIGHT))))
+        (+ y_pos height))))

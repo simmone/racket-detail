@@ -4,13 +4,13 @@
 
 (define (test-line-break)
   (detail
-   #:formats '(raw console "height.pdf")
+   #:formats '(raw console "bigfont.pdf")
    (lambda ()
      (detail-page
       (lambda ()
-        (let loop ([count 0])
-          (when (< count 40)
-                (detail-h1 (number->string count))
+        (let loop ([count 1])
+          (when (<= count 60)
+                (detail-line (number->string count) #:font_size 'big)
                 (loop (add1 count))))
         )))))
 
