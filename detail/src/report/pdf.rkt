@@ -10,7 +10,7 @@
           ))
 
 (define PAGE_WIDTH 595)
-(define PAGE_HEIGHT 1000)
+(define PAGE_HEIGHT 900)
 
 (define NORMAL_FONT_SIZE 14)
 (define BIG_FONT_SIZE 18)
@@ -25,7 +25,7 @@
 (define H3_FONT_SIZE 20)
 (define H3_HEIGHT 10)
 
-(define LINE_HEIGHT 30)
+(define LINE_HEIGHT 18)
 
 (define (detail-report-pdf pdf_file pages)
   (let ([dc #f])
@@ -34,7 +34,7 @@
           (set! dc 
                 (new pdf-dc%
                      [interactive #f]
-                     [use-paper-bbox #f]
+                     [use-paper-bbox #t]
                      [width PAGE_WIDTH]
                      [height PAGE_HEIGHT]
                      [as-eps #f]
@@ -57,7 +57,8 @@
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
                                 (send dc set-font (make-font #:size H1_FONT_SIZE))
-                                (loop-rec (cdr recs) (+ H1_HEIGHT (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line)))]
+                                (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line)
+                                (loop-rec (cdr recs) (+ H1_HEIGHT loop_line))]
                                [(eq? (DETAIL-TITLE-level rec) 'h2)
                                 (send dc set-font (make-font #:size H2_FONT_SIZE))
                                 (loop-rec (cdr recs) (+ H2_HEIGHT (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line)))]
@@ -96,7 +97,7 @@
   (let loop ([loop_lines lines]
              [y_pos start_y_pos])
     (if (not (null? loop_lines))
-        (loop (cdr loop_lines) (+ y_pos (draw-str dc (car loop_lines) start_x_pos y_pos)))
+        (loop (cdr loop_lines) (draw-str dc (car loop_lines) start_x_pos y_pos))
         y_pos)))
 
 (define (draw-rows dc start_x_pos start_y_pos cols_width rows font_size)
