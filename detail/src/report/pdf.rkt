@@ -109,23 +109,27 @@
           y_pos))))
 
 (define (draw-rows dc start_x_pos start_y_pos cols_width rows font_size)
-  (cond
-   [(eq? font_size 'big)
-    (send dc set-font (make-font #:size BIG_FONT_SIZE))]
-   [(eq? font_size 'small)
-    (send dc set-font (make-font #:size SMALL_FONT_SIZE))]
-   [else
-    (send dc set-font (make-font #:size NORMAL_FONT_SIZE))])
-  
-  (let loop-row ([loop_rows rows]
-                 [y_pos start_y_pos])
-    (if (not (null? loop_rows))
-        (loop-row
-         (cdr loop_rows)
-         (draw-row dc (car loop_rows) start_x_pos y_pos cols_width))
-        y_pos)))
+  (let ([height
+         (cond
+          [(eq? font_size 'big)
+           (send dc set-font (make-font #:size BIG_FONT_SIZE))
+           BIG_HEIGHT]
+          [(eq? font_size 'small)
+           (send dc set-font (make-font #:size SMALL_FONT_SIZE))
+           SMALL_HEIGHT]
+          [else
+           (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
+           NORMAL_HEIGHT])])
 
-(define (draw-row dc row start_x_pos y_pos cols_width)
+    (let loop-row ([loop_rows rows]
+                   [y_pos start_y_pos])
+      (if (not (null? loop_rows))
+          (loop-row
+           (cdr loop_rows)
+           (draw-row dc (car loop_rows) start_x_pos y_pos cols_width height))
+          y_pos))))
+
+(define (draw-row dc row start_x_pos y_pos cols_width height)
   (let ([start_y_pos y_pos])
     (when (> y_pos PAGE_HEIGHT)
       (send dc end-page)
@@ -138,7 +142,7 @@
                    [next_y_pos y_pos])
       (if (not (null? loop_cols))
           (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) 20))
-                    (draw-str dc (car loop_cols) x_pos start_y_pos))
+                    (draw-str dc (car loop_cols) x_pos start_y_pos height))
           next_y_pos))))
 
 (define (draw-str dc str x_pos y_pos height)
