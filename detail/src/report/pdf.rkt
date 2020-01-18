@@ -13,22 +13,22 @@
 (define PAGE_HEIGHT 900)
 
 (define BIG_FONT_SIZE 18)
-(define BIG_HEIGHT 22)
+(define BIG_HEIGHT 32)
 
 (define NORMAL_FONT_SIZE 14)
-(define NORMAL_HEIGHT 18)
+(define NORMAL_HEIGHT 28)
 
 (define SMALL_FONT_SIZE 10)
-(define SMALL_HEIGHT 14)
+(define SMALL_HEIGHT 20)
 
 (define H1_FONT_SIZE 36)
-(define H1_HEIGHT 44)
+(define H1_HEIGHT 56)
 
 (define H2_FONT_SIZE 30)
-(define H2_HEIGHT 36)
+(define H2_HEIGHT 50)
 
 (define H3_FONT_SIZE 24)
-(define H3_HEIGHT 30)
+(define H3_HEIGHT 45)
 
 (define LINE_HEIGHT 18)
 
