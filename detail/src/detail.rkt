@@ -135,7 +135,7 @@
                  ,(*current_row*)
                  ,@(map (lambda (rec) (DETAIL-ROW rec '())) (rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill "")))))))))
 
-(define (detail-col val #:width [width 30])
+(define (detail-col val #:width [width 50])
   (when (*detail*)
         (let* ([split_vals (zip-string val width)]
                [head_val (car split_vals)]

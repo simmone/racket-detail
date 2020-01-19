@@ -141,7 +141,7 @@
                    [x_pos start_x_pos]
                    [next_y_pos y_pos])
       (if (not (null? loop_cols))
-          (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) 20))
+          (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) 10))
                     (draw-str dc (car loop_cols) x_pos start_y_pos height))
           next_y_pos))))
 

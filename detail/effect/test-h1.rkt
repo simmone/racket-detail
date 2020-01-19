@@ -8,10 +8,10 @@
    (lambda ()
      (detail-page
       (lambda ()
-        (let loop ([count 1])
-          (when (<= count 22)
+        (let loop-row ([row 1])
+          (when (<= row 22)
                 (detail-h1 (number->string count))
-                (loop (add1 count))))
+                (loop-row (add1 count))))
         )))))
 
 (test-line-break)
