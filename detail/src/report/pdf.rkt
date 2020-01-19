@@ -14,12 +14,15 @@
 
 (define BIG_FONT_SIZE 18)
 (define BIG_HEIGHT 32)
+(define BIG_WIDTH 15)
 
 (define NORMAL_FONT_SIZE 14)
 (define NORMAL_HEIGHT 28)
+(define NORMAL_WIDTH 12)
 
 (define SMALL_FONT_SIZE 10)
 (define SMALL_HEIGHT 20)
+(define SMALL_WIDTH 9)
 
 (define H1_FONT_SIZE 36)
 (define H1_HEIGHT 56)
@@ -109,7 +112,7 @@
           y_pos))))
 
 (define (draw-rows dc start_x_pos start_y_pos cols_width rows font_size)
-  (let ([height
+  (let ([char_height
          (cond
           [(eq? font_size 'big)
            (send dc set-font (make-font #:size BIG_FONT_SIZE))
@@ -119,17 +122,28 @@
            SMALL_HEIGHT]
           [else
            (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
-           NORMAL_HEIGHT])])
+           NORMAL_HEIGHT])]
+        [char_width
+         (cond
+          [(eq? font_size 'big)
+           (send dc set-font (make-font #:size BIG_FONT_SIZE))
+           BIG_WIDTH]
+          [(eq? font_size 'small)
+           (send dc set-font (make-font #:size SMALL_FONT_SIZE))
+           SMALL_WIDTH]
+          [else
+           (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
+           NORMAL_WIDTH])])
 
     (let loop-row ([loop_rows rows]
                    [y_pos start_y_pos])
       (if (not (null? loop_rows))
           (loop-row
            (cdr loop_rows)
-           (draw-row dc (car loop_rows) start_x_pos y_pos cols_width height))
+           (draw-row dc (car loop_rows) start_x_pos y_pos cols_width char_height char_width))
           y_pos))))
 
-(define (draw-row dc row start_x_pos y_pos cols_width height)
+(define (draw-row dc row start_x_pos y_pos cols_width char_height char_width)
   (let ([start_y_pos y_pos])
     (when (> y_pos PAGE_HEIGHT)
       (send dc end-page)
@@ -141,8 +155,8 @@
                    [x_pos start_x_pos]
                    [next_y_pos y_pos])
       (if (not (null? loop_cols))
-          (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) 10))
-                    (draw-str dc (car loop_cols) x_pos start_y_pos height))
+          (loop-col (cdr loop_cols) (cdr loop_widths) (+ x_pos (* (car loop_widths) char_width))
+                    (draw-str dc (car loop_cols) x_pos start_y_pos char_height))
           next_y_pos))))
 
 (define (draw-str dc str x_pos y_pos height)
