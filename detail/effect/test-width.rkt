@@ -16,7 +16,21 @@
          (lambda ()
            (detail-row
             (lambda ()
+              (detail-col "123456789")
               (detail-col "12345678901")
+              (detail-col "12345678901")
+              ))
+
+           (detail-row
+            (lambda ()
+              (detail-col "dividenda")
+              (detail-col "12345678901")
+              (detail-col "12345678901")
+              ))
+
+           (detail-row
+            (lambda ()
+              (detail-col "DDDDDDDDD")
               (detail-col "12345678901")
               (detail-col "12345678901")
               ))))))
@@ -29,7 +43,21 @@
          (lambda ()
            (detail-row
             (lambda ()
+              (detail-col "123456789")
               (detail-col "12345678901")
+              (detail-col "12345678901")
+              ))
+
+           (detail-row
+            (lambda ()
+              (detail-col "dividenda")
+              (detail-col "12345678901")
+              (detail-col "12345678901")
+              ))
+
+           (detail-row
+            (lambda ()
+              (detail-col "DDDDDDDDD")
               (detail-col "12345678901")
               (detail-col "12345678901")
               ))))))
@@ -42,7 +70,21 @@
          (lambda ()
            (detail-row
             (lambda ()
+              (detail-col "123456789")
               (detail-col "12345678901")
+              (detail-col "12345678901")
+              ))
+
+           (detail-row
+            (lambda ()
+              (detail-col "dividenda")
+              (detail-col "12345678901")
+              (detail-col "12345678901")
+              ))
+
+           (detail-row
+            (lambda ()
+              (detail-col "DDDDDDDDD")
               (detail-col "12345678901")
               (detail-col "12345678901")
               ))))))

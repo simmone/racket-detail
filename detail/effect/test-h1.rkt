@@ -10,8 +10,8 @@
       (lambda ()
         (let loop-row ([row 1])
           (when (<= row 22)
-                (detail-h1 (number->string count))
-                (loop-row (add1 count))))
+                (detail-h1 (number->string row))
+                (loop-row (add1 row))))
         )))))
 
 (test-line-break)

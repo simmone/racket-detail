@@ -14,24 +14,24 @@
 
 (define BIG_FONT_SIZE 18)
 (define BIG_HEIGHT 32)
-(define BIG_WIDTH 15)
+(define BIG_WIDTH 19)
 
 (define NORMAL_FONT_SIZE 14)
 (define NORMAL_HEIGHT 28)
-(define NORMAL_WIDTH 12)
+(define NORMAL_WIDTH 15)
 
 (define SMALL_FONT_SIZE 10)
 (define SMALL_HEIGHT 20)
-(define SMALL_WIDTH 9)
+(define SMALL_WIDTH 11)
 
 (define H1_FONT_SIZE 36)
-(define H1_HEIGHT 56)
+(define H1_HEIGHT 72)
 
 (define H2_FONT_SIZE 30)
-(define H2_HEIGHT 50)
+(define H2_HEIGHT 60)
 
 (define H3_FONT_SIZE 24)
-(define H3_HEIGHT 45)
+(define H3_HEIGHT 48)
 
 (define LINE_HEIGHT 18)
 
