@@ -33,8 +33,8 @@
                         (
                          #:font_size (or/c 'normal 'big 'small)
                          ) any)]
-          [detail-row (-> procedure? void?)]
-          [detail-col (->* (string?) (#:width natural?) void?)]
+          [detail-row (-> procedure? any)]
+          [detail-col (->* (string?) (#:width natural?) any)]
           ))
 
 (define (detail
