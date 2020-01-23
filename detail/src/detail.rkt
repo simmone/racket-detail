@@ -62,6 +62,7 @@
                              (lambda (e)
                                (detail-page
                                 (lambda ()
+                                  (printf "~a\n" (exn-message e))
                                   (detail-line (exn-message e))))
                                (when (*detail*) (detail-report (*detail*)))
                                exception_value)])
@@ -128,18 +129,19 @@
 (define *current_row* (make-parameter #f))
 
 (define (detail-row proc)
-  (when (*detail*)
+  (if (*detail*)
       (parameterize
-          ([*current_row* (DETAIL-ROW '() '())])
-        (dynamic-wind
-            (lambda () (void))
-            (lambda () (proc))
-            (lambda ()
-              (set-DETAIL-LIST-rows! 
-               (*current_list*)
-               `(,@(DETAIL-LIST-rows (*current_list*))
-                 ,(*current_row*)
-                 ,@(map (lambda (rec) (DETAIL-ROW rec '())) (rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill "")))))))))
+       ([*current_row* (DETAIL-ROW '() '())])
+       (dynamic-wind
+           (lambda () (void))
+           (lambda () (proc))
+           (lambda ()
+             (set-DETAIL-LIST-rows! 
+              (*current_list*)
+              `(,@(DETAIL-LIST-rows (*current_list*))
+                ,(*current_row*)
+                ,@(map (lambda (rec) (DETAIL-ROW rec '())) (rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill "")))))))
+      (proc)))
 
 (define (detail-col val #:width [width 50])
   (when (*detail*)
