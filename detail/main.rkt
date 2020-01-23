@@ -33,4 +33,10 @@
                          ) any)]
           [detail-row (-> procedure? any)]
           [detail-col (->* (string?) (#:width natural?) any)]
+          [detail-simple-list (->*
+                        ((listof string?))
+                        (
+                         #:font_size (or/c 'normal 'big 'small)
+                         #:cols_count natural?
+                         ) any)]
           ))

@@ -35,6 +35,12 @@
                          ) any)]
           [detail-row (-> procedure? any)]
           [detail-col (->* (string?) (#:width natural?) any)]
+          [detail-simple-list (->*
+                        ((listof string?))
+                        (
+                         #:font_size (or/c 'normal 'big 'small)
+                         #:cols_count natural?
+                         ) any)]
           ))
 
 (define (detail
@@ -157,3 +163,29 @@
                     (set-DETAIL-LIST-cols_width!
                      (*current_list*)
                      (list-set cols_width val_pos head_val_width))))))))
+
+(define (detail-simple-list
+         str_list
+         #:font_size [font_size (*font_size*)]
+         #:cols_count [cols_count 4])
+  (when (*detail*)
+        (detail-list
+         #:font_size font_size
+         (lambda ()
+           (let loop-row ([row_count 1]
+                          [row_list str_list])
+            (when (not (null? row_list))
+                  (loop-row
+                   (add1 row_count)
+                   (detail-row
+                    (lambda ()
+                      (detail-col (format "[~a]" row_count))
+                      (let loop-col ([col_list row_list]
+                                     [count 0])
+                        (if (not (null? col_list))
+                            (if (< count cols_count)
+                                (begin
+                                  (detail-col (car col_list))
+                                  (loop-col (cdr col_list) (add1 count)))
+                                col_list)
+                            col_list)))))))))))
