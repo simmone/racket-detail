@@ -53,8 +53,8 @@
                   (if formats
                       (DETAIL formats '())
                       #f)]
-                 [*line_break_length* 60]
-                 [*font_size* 'normal])
+                 [*line_break_length* line_break_length]
+                 [*font_size* font_size])
        (dynamic-wind
           (lambda () (void))
           (lambda ()
