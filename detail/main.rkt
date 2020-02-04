@@ -17,6 +17,12 @@
                          #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) any)]
+          [detail-div (->*
+                        (procedure?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) any)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]

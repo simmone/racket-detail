@@ -19,6 +19,12 @@
                          #:line_break_length natural?
                          #:font_size (or/c 'normal 'big 'small)
                          ) any)]
+          [detail-div (->*
+                        (procedure?)
+                        (
+                         #:line_break_length natural?
+                         #:font_size (or/c 'normal 'big 'small)
+                         ) any)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
           [detail-h3 (-> string? void?)]
@@ -89,6 +95,17 @@
               (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
       (proc)))
 
+(define (detail-div
+         proc
+         #:line_break_length [line_break_length (*line_break_length*)]
+         #:font_size [font_size (*font_size*)])
+  (if (*detail*)
+      (parameterize
+          ([*line_break_length* line_break_length]
+           [*font_size* font_size])
+        (proc))
+      (proc)))
+
 (define (detail-add-rec rec)
   (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec)))
 
@@ -143,7 +160,7 @@
                 ,@(map (lambda (rec) (DETAIL-ROW rec '())) (rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill "")))))))
       (proc)))
 
-(define (detail-col val #:width [width 50])
+(define (detail-col val #:width [width 100])
   (when (*detail*)
         (let* ([split_vals (zip-string val width)]
                [head_val (car split_vals)]

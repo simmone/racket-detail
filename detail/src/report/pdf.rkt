@@ -52,7 +52,7 @@
         (lambda ()
           (let loop-page ([loop_pages pages])
             (when (not (null? loop_pages))
-              (let* ([page (car loop_pages)])
+              (let ([page (car loop_pages)])
                 (dynamic-wind
                     (lambda () (send dc start-page))
                     (lambda ()
