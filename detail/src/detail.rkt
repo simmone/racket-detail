@@ -68,7 +68,6 @@
                              (lambda (e)
                                (detail-page
                                 (lambda ()
-                                  (printf "~a\n" (exn-message e))
                                   (detail-line (exn-message e))))
                                (when (*detail*) (detail-report (*detail*)))
                                exception_value)])
