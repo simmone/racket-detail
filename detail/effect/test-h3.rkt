@@ -4,7 +4,7 @@
 
 (define (test-line-break)
   (detail
-   #:formats '(raw console "h3.pdf")
+   #:formats? '(raw console "h3.pdf")
    (lambda ()
      (detail-page
       (lambda ()

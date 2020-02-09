@@ -8,22 +8,22 @@
           [detail (->*
                    (procedure?)
                    (
-                    #:formats (or/c #f (listof (or/c 'raw 'console path-string?)))
-                    #:exception_value any/c
-                    #:line_break_length natural?
-                    #:font_size (or/c 'normal 'big 'small)
+                    #:formats? (or/c #f (listof (or/c 'raw 'console path-string?)))
+                    #:exception_value? any/c
+                    #:line_break_length? natural?
+                    #:font_size? (or/c 'normal 'big 'small)
                     ) any)]
           [detail-page (->*
                         (procedure?)
                         (
-                         #:line_break_length natural?
-                         #:font_size (or/c 'normal 'big 'small)
+                         #:line_break_length? natural?
+                         #:font_size? (or/c 'normal 'big 'small)
                          ) any)]
           [detail-div (->*
                         (procedure?)
                         (
-                         #:line_break_length natural?
-                         #:font_size (or/c 'normal 'big 'small)
+                         #:line_break_length? natural?
+                         #:font_size? (or/c 'normal 'big 'small)
                          ) any)]
           [detail-h1 (-> string? void?)]
           [detail-h2 (-> string? void?)]
@@ -31,29 +31,29 @@
           [detail-line (->*
                         (string?)
                         (
-                         #:line_break_length natural?
-                         #:font_size (or/c 'normal 'big 'small)
+                         #:line_break_length? natural?
+                         #:font_size? (or/c 'normal 'big 'small)
                          ) void?)]
           [detail-list (->*
                         (procedure?)
                         (
-                         #:font_size (or/c 'normal 'big 'small)
+                         #:font_size? (or/c 'normal 'big 'small)
                          ) any)]
           [detail-row (-> procedure? any)]
-          [detail-col (->* (string?) (#:width natural?) any)]
+          [detail-col (->* (string?) (#:width? natural?) any)]
           [detail-simple-list (->*
                         ((listof string?))
                         (
-                         #:font_size (or/c 'normal 'big 'small)
-                         #:cols_count natural?
+                         #:font_size? (or/c 'normal 'big 'small)
+                         #:cols_count? natural?
                          ) any)]
           ))
 
 (define (detail
-         #:formats [formats #f]
-         #:exception_value [exception_value #f]
-         #:line_break_length [line_break_length 60]
-         #:font_size [font_size 'normal]
+         #:formats? [formats #f]
+         #:exception_value? [exception_value #f]
+         #:line_break_length? [line_break_length 60]
+         #:font_size? [font_size 'normal]
          proc)
   (parameterize ([*detail*
                   (if formats
@@ -80,8 +80,8 @@
 
 (define (detail-page
          proc
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+         #:line_break_length? [line_break_length (*line_break_length*)]
+         #:font_size? [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
           ([*current_page* (DETAIL-PAGE '())]
@@ -96,8 +96,8 @@
 
 (define (detail-div
          proc
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+         #:line_break_length? [line_break_length (*line_break_length*)]
+         #:font_size? [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
           ([*line_break_length* line_break_length]
@@ -122,8 +122,8 @@
 
 (define (detail-line
          line
-         #:line_break_length [line_break_length (*line_break_length*)]
-         #:font_size [font_size (*font_size*)])
+         #:line_break_length? [line_break_length (*line_break_length*)]
+         #:font_size? [font_size (*font_size*)])
   (when (*detail*)
         (detail-add-rec (DETAIL-LINE line line_break_length font_size))))
 
@@ -131,7 +131,7 @@
 
 (define (detail-list
          proc
-         #:font_size [font_size (*font_size*)])
+         #:font_size? [font_size (*font_size*)])
   (if (*detail*)
       (parameterize
           ([*current_list* (DETAIL-LIST '() '() font_size)])
@@ -159,9 +159,9 @@
                 ,@(map (lambda (rec) (DETAIL-ROW rec '())) (rows->cols (DETAIL-ROW-tail_rows (*current_row*)) #:fill "")))))))
       (proc)))
 
-(define (detail-col val #:width [width 100])
+(define (detail-col val #:width? [width? 100])
   (when (*detail*)
-        (let* ([split_vals (zip-string val width)]
+        (let* ([split_vals (zip-string val width?)]
                [head_val (car split_vals)]
                [head_val_width (string-length head_val)]
                [tail_vals (cdr split_vals)])
@@ -184,11 +184,11 @@
 
 (define (detail-simple-list
          str_list
-         #:font_size [font_size (*font_size*)]
-         #:cols_count [cols_count 4])
+         #:font_size? [font_size (*font_size*)]
+         #:cols_count? [cols_count 4])
   (when (*detail*)
         (detail-list
-         #:font_size font_size
+         #:font_size? font_size
          (lambda ()
            (let loop-row ([row_count 1]
                           [row_list str_list])

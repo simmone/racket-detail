@@ -4,13 +4,13 @@
 
 (define (test-basic)
   (detail
-   #:formats '(raw console "basic.pdf")
-   #:line_break_length 1
-   #:font_size 'small
+   #:formats? '(raw console "basic.pdf")
+   #:line_break_length? 1
+   #:font_size? 'small
    (lambda ()
      (detail-page
-      #:line_break_length 100
-      #:font_size 'big
+      #:line_break_length? 100
+      #:font_size? 'big
       (lambda ()
         (detail-h1 "Hello World!")
         
