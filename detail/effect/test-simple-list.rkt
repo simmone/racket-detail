@@ -37,6 +37,17 @@
            #:font_size? 'small                            
            #:cols_count? 7)
 
+        (detail-simple-list '(
+           "1000000000" "2" "3" "4"
+           "1" "2" "3" "4"
+           "1" "2" "3" "4"
+           "1" "2" "3" "4"
+           "1" "2" "3" "4"
+           )
+           #:font_size? 'small                            
+           #:cols_count? 7
+           #:col_width? 5)
+
         )))))
 
 (test-wdith)

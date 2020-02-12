@@ -46,6 +46,7 @@
                         (
                          #:font_size? (or/c 'normal 'big 'small)
                          #:cols_count? natural?
+                         #:col_width? natural?
                          ) any)]
           ))
 
@@ -184,11 +185,12 @@
 
 (define (detail-simple-list
          str_list
-         #:font_size? [font_size (*font_size*)]
-         #:cols_count? [cols_count 4])
+         #:font_size? [font_size? (*font_size*)]
+         #:cols_count? [cols_count? 4]
+         #:col_width? [col_width? 64])
   (when (*detail*)
         (detail-list
-         #:font_size? font_size
+         #:font_size? font_size?
          (lambda ()
            (let loop-row ([row_count 1]
                           [row_list str_list])
@@ -201,9 +203,9 @@
                       (let loop-col ([col_list row_list]
                                      [count 0])
                         (if (not (null? col_list))
-                            (if (< count cols_count)
+                            (if (< count cols_count?)
                                 (begin
-                                  (detail-col (car col_list))
+                                  (detail-col (car col_list) #:width? col_width?)
                                   (loop-col (cdr col_list) (add1 count)))
                                 col_list)
                             col_list)))))))))))

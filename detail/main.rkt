@@ -44,5 +44,6 @@
                         (
                          #:font_size? (or/c 'normal 'big 'small)
                          #:cols_count? natural?
+                         #:col_width? natural?
                          ) any)]
           ))
