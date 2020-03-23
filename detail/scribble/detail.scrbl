@@ -54,10 +54,36 @@ raco pkg install detail
 
 3. detail can generate multiple report at the same time.
 
-4. some properties can be set in detail or the children elements, like: detail-page, detail-line...
+4. some properties can be set in parent or the children elements, like: detail-page, detail-line...
    properted is inheritated from parent element.
 
+@section{Tradeoff}
+
+The apparent's tradeoff of detail is the verbose and the verbose things combined with your real code.
+
+To record the detail process of the real code, the real code should be included into the body of detail.
+
+The good thing is you can treat detail code as the docs to understand the real code's meaning.
+
+The bad thing is you maybe think this will turn your clean code to some mess。
+
+@section{It's Transparent}
+
+All the detail's code is transparent.
+
+It means it include all your real code into its lambda body, though, any detail container's return value is the real code's return value.
+
+you put your code into the detail's body anywhere, it doesn's affect the function's running results.
+
+you put the detail's output on, it'll slow down the running process, but the result is the same as you put the detail output off.
+
 @section{Hierarchy}
+
+detail is the parent element of detail-page and detail-div.
+
+detail-page and detail-div is other elements's parent.
+
+detail-list's children element is detail-row, detail-row is the parent of detail-col.
 
 @codeblock{
 (detail
@@ -93,7 +119,7 @@ raco pkg install detail
 @section{Top Container: detail}
 
 @defproc[(detail
-              [proc (procedure?)]
+              [proc procedure?]
               [#:formats? formats? (or/c #f (listof (or/c 'raw 'console path-string?)))]
               [#:exception_value? exception_value? any/c]
               [#:line_break_length? line_break_length? natural?]
@@ -102,19 +128,21 @@ raco pkg install detail
             any]{
   detail is the top container, all detail statement should be placed into proc.
 
-  formats?: output multiple report at the same time.
+  formats?: reports list
 
-  #f: output nothing
+  formats? has below options:
 
-  raw: detail raw information
+  #f: don't run any detail statements, shutoff the log.
 
-  console: output to console at txt format
+  raw: detail raw information, used for debug.
+
+  console: output to console, format same as txt.
 
   path-string?: support *.txt or *.pdf
 
   exception_value?: when exception happens, return this value.
 
-  line_break_length?: global env, how long a line before auto linefeed.
+  line_break_length?: global env, how long a line before auto returned.
 
   font_size?: global env.
 }
@@ -122,7 +150,7 @@ raco pkg install detail
 @section{Second Container: detail-page/detail-div}
 
 @defproc[(detail-page
-              [proc (procedure?)]
+              [proc procedure?]
               [#:line_break_length? line_break_length? natural?]
               [#:font_size? font_size? (or/c 'normal 'big 'small)]
               )
@@ -135,4 +163,59 @@ raco pkg install detail
 }
 
 @section{detail-h1/2/3}
+
+@defproc[(detail-h1/2/3
+              [head string?]
+              )
+            void?]{
+ output a header with different font size: detail-h1 detail-h2 detail-h3
+}
+
+@section{detail-line}
+
+@defproc[(detail-line
+              [line string?]
+              [#:line_break_length? line_break_length? natural?]
+              [#:font_size? font_size? (or/c 'normal 'big 'small)]
+              )
+            any]{
+  line_break_length? and font_size? inherited from parent.
+}
+
+@section{detail-list/row/col}
+
+@defproc[(detail-list
+              [proc procedure?]
+              [#:font_size? font_size? (or/c 'normal 'big 'small)]
+              )
+            any]{
+  detail-list is a container.
+
+  it contains detail-rows, detail-row contains detail-cols.
+}
+
+@defproc[(detail-row
+              [proc procedure?]
+              )
+            any]{
+  detail-row is a container.
+
+  it contains detail-cols.
+}
+
+@defproc[(detail-col
+              [col string?]
+              [width? natural?]
+              )
+            any]{
+  detail-col add a col value with optional width?
+
+  it included in detail-rows.
+}
+
+
+
+
+
+
 
