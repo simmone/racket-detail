@@ -59,13 +59,15 @@ raco pkg install detail
 
 @section{Tradeoff}
 
-The apparent's tradeoff of detail is the verbose and the verbose things combined with your real code.
+The apparent's tradeoff of detail is the "noise", you'll think its so verbose.
 
-To record the detail process of the real code, the real code should be included into the body of detail.
+For the purpose of record the detail process, the real code should be included into the body of detail.
 
-The good thing is you can treat detail code as the docs to understand the real code's meaning.
+This maybe affect some readability of the code.
 
-The bad thing is you maybe think this will turn your clean code to some mess。
+The pro is you can treat detail code as the docs to understand the real code.
+
+The con is you maybe think this will make your clean code to some mess。
 
 @section{It's Transparent}
 
