@@ -265,3 +265,11 @@ detail-list's children element is detail-row, detail-row is the parent of detail
       (detail-line "What immortal hand or eye ")
       (detail-line "Dare frame thy fearful symmetry? ")))))
 }
+
+above code will output a pdf file: tiger.pdf
+
+the two pages of pdf file's screen shot:
+
+@image{example/tiger1.png}
+
+@image{example/tiger2.png}
