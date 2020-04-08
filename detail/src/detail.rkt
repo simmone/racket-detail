@@ -33,7 +33,13 @@
                         (
                          #:line_break_length? natural?
                          #:font_size? (or/c 'normal 'big 'small)
-                         ) void?)]
+                         ) any)]
+          [detail-lines (->*
+                        (listof string?)
+                        (
+                         #:line_break_length? natural?
+                         #:font_size? (or/c 'normal 'big 'small)
+                         ) any)]
           [detail-list (->*
                         (procedure?)
                         (
@@ -127,6 +133,16 @@
          #:font_size? [font_size (*font_size*)])
   (when (*detail*)
         (detail-add-rec (DETAIL-LINE line line_break_length font_size))))
+
+(define (detail-lines
+         lines
+         #:line_break_length? [line_break_length (*line_break_length*)]
+         #:font_size? [font_size (*font_size*)])
+  (when (*detail*)
+        (map
+         (lambda (line)
+           (detail-line line #:line_break_length? line_break_length #:font_size? font_size))
+         lines)))
 
 (define *current_list* (make-parameter #f))
 
