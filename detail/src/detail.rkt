@@ -35,7 +35,7 @@
                          #:font_size? (or/c 'normal 'big 'small)
                          ) any)]
           [detail-lines (->*
-                        (listof string?)
+                        ((listof string?))
                         (
                          #:line_break_length? natural?
                          #:font_size? (or/c 'normal 'big 'small)

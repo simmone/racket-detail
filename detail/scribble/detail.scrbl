@@ -1,5 +1,7 @@
 #lang scribble/manual
 
+@(require (for-label detail))
+
 @title{Detail: a log tool}
 
 integrated into the code to generate detail report when needed(report or debug).
@@ -13,6 +15,8 @@ So I can see the whole process and debug the code easily.
 And these log statements in the code can't slow down the computing when the log closed.
 
 @table-of-contents[]
+
+@defmodule[detail]
 
 @section[#:tag "install"]{Install}
 
