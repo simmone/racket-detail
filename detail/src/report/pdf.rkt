@@ -86,7 +86,13 @@
                               (send dc set-font (make-font #:size NORMAL_FONT_SIZE))
                               (loop-rec
                                (cdr recs)
-                               (draw-rows dc 0 loop_line (DETAIL-LIST-cols_width rec) (DETAIL-LIST-rows rec) (DETAIL-LIST-font_size rec)))])))))
+                               (draw-rows dc 0 loop_line (DETAIL-LIST-cols_width rec) (DETAIL-LIST-rows rec) (DETAIL-LIST-font_size rec)))]
+                             [(DETAIL-IMG? rec)
+                              (let* ([target (make-bitmap 100 100)])
+                                (send target load-file (DETAIL-IMG-img_file rec))
+                                (send dc draw-bitmap target (DETAIL-IMG-x rec) (DETAIL-IMG-y rec)))
+                              (loop-rec (cdr recs) (+ 100 loop_line))]
+                             )))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
         (lambda ()

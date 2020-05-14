@@ -13,7 +13,7 @@
           [struct
            DETAIL-PAGE
            (
-            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-LIST?)))
+            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-LIST? DETAIL-IMG?)))
             )]
           [struct DETAIL-TITLE
                   (
@@ -36,6 +36,12 @@
                   (
                    (cols (listof string?))
                    (tail_rows (listof (listof string?)))
+                   )]
+          [struct DETAIL-IMG
+                  (
+                   (img_file path-string?)
+                   (x natural?)
+                   (y natural?)
                    )]
           ))
 
@@ -84,4 +90,12 @@
  (
   [cols #:mutable]
   [tail_rows #:mutable]
+  ))
+
+(struct
+ DETAIL-IMG
+ (
+  [img_file #:mutable]
+  [x #:mutable]
+  [y #:mutable]
   ))

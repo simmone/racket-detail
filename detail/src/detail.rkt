@@ -54,6 +54,11 @@
                          #:cols_count? natural?
                          #:col_width? natural?
                          ) any)]
+          [detail-img (->
+                       path-string?
+                       natural?
+                       natural?
+                       any)]
           ))
 
 (define (detail
@@ -225,3 +230,7 @@
                                   (loop-col (cdr col_list) (add1 count)))
                                 col_list)
                             col_list)))))))))))
+
+(define (detail-img img x y)
+  (when (*detail*)
+        (detail-add-rec (DETAIL-IMG img x y))))
