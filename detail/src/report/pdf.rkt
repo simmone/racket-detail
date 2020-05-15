@@ -90,8 +90,8 @@
                              [(DETAIL-IMG? rec)
                               (let* ([target (make-bitmap 100 100)])
                                 (send target load-file (DETAIL-IMG-img_file rec))
-                                (send dc draw-bitmap target (DETAIL-IMG-x rec) (DETAIL-IMG-y rec)))
-                              (loop-rec (cdr recs) (+ 100 loop_line))]
+                                (send dc draw-bitmap target (DETAIL-IMG-x rec) (DETAIL-IMG-y rec))
+                                (loop-rec (cdr recs) (+ (send target get-height) loop_line)))]
                              )))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
