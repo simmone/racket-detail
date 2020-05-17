@@ -40,7 +40,6 @@
           [struct DETAIL-IMG
                   (
                    (img_file path-string?)
-                   (x natural?)
                    (y natural?)
                    )]
           ))
@@ -96,6 +95,5 @@
  DETAIL-IMG
  (
   [img_file #:mutable]
-  [x #:mutable]
   [y #:mutable]
   ))

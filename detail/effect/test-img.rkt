@@ -11,7 +11,7 @@
         (let loop-row ([row 1])
           (when (<= row 22)
                 (detail-h1 (number->string row))
-                (detail-img "logo.jpg" 0 0)
+                (detail-img "logo.jpg" (* row 10))
                 (loop-row (add1 row))))
         )))))
 

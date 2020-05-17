@@ -55,6 +55,5 @@
           [detail-img (->
                        path-string?
                        natural?
-                       natural?
                        any)]
           ))

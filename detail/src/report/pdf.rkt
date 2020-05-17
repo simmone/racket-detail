@@ -88,10 +88,11 @@
                                (cdr recs)
                                (draw-rows dc 0 loop_line (DETAIL-LIST-cols_width rec) (DETAIL-LIST-rows rec) (DETAIL-LIST-font_size rec)))]
                              [(DETAIL-IMG? rec)
-                              (let* ([target (make-bitmap 100 100)])
-                                (send target load-file (DETAIL-IMG-img_file rec))
-                                (send dc draw-bitmap target (DETAIL-IMG-x rec) (DETAIL-IMG-y rec))
-                                (loop-rec (cdr recs) (+ (send target get-height) loop_line)))]
+                              (loop-rec
+                               (cdr recs)
+                               (+
+                                (draw-img dc (DETAIL-IMG-img_file rec) (DETAIL-IMG-y rec) loop_line)
+                                loop_line))]
                              )))))
                     (lambda () (send dc end-page))))
               (loop-page (cdr loop_pages)))))
@@ -175,3 +176,9 @@
       (begin
         (send dc draw-text str x_pos y_pos)
         (+ y_pos height))))
+
+(define (draw-img dc img_file y_pos x_pos)
+  (let* ([target (make-bitmap 1 1)])
+    (send target load-file img_file)
+    (send dc draw-bitmap target y_pos x_pos)
+    (send target get-height)))

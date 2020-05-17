@@ -57,7 +57,6 @@
           [detail-img (->
                        path-string?
                        natural?
-                       natural?
                        any)]
           ))
 
@@ -231,6 +230,6 @@
                                 col_list)
                             col_list)))))))))))
 
-(define (detail-img img x y)
+(define (detail-img img y)
   (when (*detail*)
-        (detail-add-rec (DETAIL-IMG img x y))))
+        (detail-add-rec (DETAIL-IMG img y))))
