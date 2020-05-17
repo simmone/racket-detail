@@ -40,6 +40,8 @@
                                         (loop-col (cdr cols) (cdr cols_width) (add1 col_index))))
                                 (printf "\n")
                                 (loop-row (cdr rows) (add1 row_index))))]
+                       [(DETAIL-IMG? rec)
+                        (printf "DETAIL-IMG:[~a][~a]\n\n" (DETAIL-IMG-img_file rec) (DETAIL-IMG-y rec))]
                        ))
                     (loop-rec (cdr recs))))
             (printf "PAGE-END\n"))

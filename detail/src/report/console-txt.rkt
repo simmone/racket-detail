@@ -40,7 +40,10 @@
                                         (printf "~a " (~a #:min-width (car loop_cols_width) (car loop_cols)))
                                         (loop-cols (cdr loop_cols) (cdr loop_cols_width)))
                                       (printf "\n"))))
-                              (loop-row (cdr rows)))))]))
+                              (loop-row (cdr rows)))))]
+                       [(DETAIL-IMG? rec)
+                        (printf "[~a][~a]\n\n" (DETAIL-IMG-img_file rec) (DETAIL-IMG-y rec))]
+                       ))
                     (loop-rec (cdr recs))))
           (printf "----\n")
           (loop-page (cdr loop_pages))))))

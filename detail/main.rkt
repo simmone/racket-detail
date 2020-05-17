@@ -52,4 +52,8 @@
                          #:cols_count? natural?
                          #:col_width? natural?
                          ) any)]
+          [detail-img (->
+                       path-string?
+                       natural?
+                       any)]
           ))
