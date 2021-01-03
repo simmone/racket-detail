@@ -27,6 +27,7 @@ raco pkg install detail
 @codeblock{
   (detail
    #:formats? '(raw console "basic.pdf")
+;; #:formats? #f to disable log
    #:line_break_length? 1
    #:font_size? 'small
    (lambda ()
