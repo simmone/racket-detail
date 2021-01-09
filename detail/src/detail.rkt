@@ -19,6 +19,7 @@
                          #:line_break_length? natural?
                          #:font_size? (or/c 'normal 'big 'small)
                          ) any)]
+          [detail-new-page (-> any)]
           [detail-div (->*
                         (procedure?)
                         (
@@ -104,6 +105,9 @@
             (lambda ()
               (set-DETAIL-pages! (*detail*) `(,@(DETAIL-pages (*detail*)) ,(*current_page*))))))
       (proc)))
+
+(define (detail-new-page)
+  (detail-add-rec (DETAIL-NEW-PAGE)))
 
 (define (detail-div
          proc

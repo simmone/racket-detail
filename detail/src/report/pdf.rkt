@@ -61,6 +61,10 @@
                         (when (not (null? recs))
                           (let ([rec (car recs)])
                             (cond
+                             [(DETAIL-NEW-PAGE? rec)
+                              (loop-rec
+                               (cdr recs)
+                               (draw-new-page dc))]
                              [(DETAIL-TITLE? rec)
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
@@ -150,12 +154,15 @@
            (draw-row dc (car loop_rows) start_x_pos y_pos cols_width char_height char_width))
           y_pos))))
 
+(define (draw-new-page dc)
+  (send dc end-page)
+  (send dc start-page)
+  0)
+
 (define (draw-row dc row start_x_pos y_pos cols_width char_height char_width)
   (let ([start_y_pos y_pos])
     (when (> y_pos PAGE_HEIGHT)
-      (send dc end-page)
-      (send dc start-page)
-      (set! start_y_pos 0))
+      (set! start_y_pos (draw-new-page dc)))
 
     (let loop-col ([loop_cols (DETAIL-ROW-cols row)]
                    [loop_widths cols_width]

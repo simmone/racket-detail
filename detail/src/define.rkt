@@ -13,8 +13,11 @@
           [struct
            DETAIL-PAGE
            (
-            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-LIST? DETAIL-IMG?)))
+            (recs (listof (or/c DETAIL-TITLE? DETAIL-LINE? DETAIL-LIST? DETAIL-IMG? DETAIL-NEW-PAGE?)))
             )]
+          [struct
+           DETAIL-NEW-PAGE
+           ()]
           [struct DETAIL-TITLE
                   (
                    (level (or/c 'h1 'h2 'h3))
@@ -60,6 +63,10 @@
  (
   [recs #:mutable]
   ))
+
+(struct
+ DETAIL-NEW-PAGE
+ ())
 
 (struct
  DETAIL-TITLE

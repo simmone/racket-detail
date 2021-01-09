@@ -17,6 +17,7 @@
                          #:line_break_length? natural?
                          #:font_size? (or/c 'normal 'big 'small)
                          ) any)]
+          [detail-new-page (-> any)]
           [detail-div (->*
                         (procedure?)
                         (

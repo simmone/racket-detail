@@ -84,6 +84,14 @@ you put your code into the detail's body anywhere, it doesn's affect the functio
 
 you put the detail's output on, it'll slow down the running process, but the result is the same as you put the detail output off.
 
+@section{Auto Page Split}
+
+When use pdf as output format, you can write all things in one page: detail-line, detail-simple-list....
+
+It start new page automatically.
+
+If want to start a new page manually, use (start-new-page) in detail-page scope.
+
 @section{Hierarchy}
 
 detail is the parent element of detail-page and detail-div.
@@ -100,6 +108,10 @@ detail-list's children element is detail-row, detail-row is the parent of detail
     (lambda ()
     ...
     (detail-line...)
+
+    ...
+    (detail-new-page)
+
     ...
     (detail-h1...)
     ...

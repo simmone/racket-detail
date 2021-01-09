@@ -16,7 +16,9 @@
            (detail-row (lambda () (detail-col "12345") (detail-col "123456789012345678901" #:width? 1)))
            (detail-row (lambda () (detail-col "12345") (detail-col "123456789012345678901" #:width? 1)))
            (detail-row (lambda () (detail-col "12345") (detail-col "123456789012345678901" #:width? 1)))))
-
+        
+        (detail-new-page)
+        
         (detail-list
          #:font_size? 'big
          (lambda ()
@@ -24,6 +26,8 @@
            (detail-row (lambda () (detail-col "12345") (detail-col "123456789012345678901" #:width? 1)))
            (detail-row (lambda () (detail-col "12345") (detail-col "123456789012345678901" #:width? 1)))
            (detail-row (lambda () (detail-col "12345") (detail-col "123456789012345678901" #:width? 1)))))
+
+        (detail-new-page)
 
         (detail-list
          #:font_size? 'small

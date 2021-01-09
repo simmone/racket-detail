@@ -33,6 +33,7 @@ embbed into your code to give a full detail report when needed.
 
 3. statements:
    **detail-page**: container, tell the reports when its content ends, should start new page.
+   **detail-new-page** start a new page in detail-page scope.
    **detail-h1/2/3**: header
    **detail-line**: output a line, use line_break_length? to control the line width.
    **detail-list**: container, use **detail-row** and **detail-col** to construct a list report.
