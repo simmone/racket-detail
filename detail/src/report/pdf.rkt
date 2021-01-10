@@ -48,7 +48,7 @@
                      [as-eps #f]
                      [output pdf_file]))
           (send dc start-doc "")
-          (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern)))
+          (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern #:weight 'semibold)))
         (lambda ()
           (let loop-page ([loop_pages pages])
             (when (not (null? loop_pages))
@@ -68,16 +68,16 @@
                              [(DETAIL-TITLE? rec)
                               (cond
                                [(eq? (DETAIL-TITLE-level rec) 'h1)
-                                (send dc set-font (make-font #:size H1_FONT_SIZE #:family 'modern))
+                                (send dc set-font (make-font #:size H1_FONT_SIZE #:family 'modern #:weight 'semibold))
                                 (loop-rec (cdr recs) (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line H1_HEIGHT))]
                                [(eq? (DETAIL-TITLE-level rec) 'h2)
-                                (send dc set-font (make-font #:size H2_FONT_SIZE #:family 'modern))
+                                (send dc set-font (make-font #:size H2_FONT_SIZE #:family 'modern #:weight 'semibold))
                                 (loop-rec (cdr recs) (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line H2_HEIGHT))]
                                [(eq? (DETAIL-TITLE-level rec) 'h3)
-                                (send dc set-font (make-font #:size H3_FONT_SIZE #:family 'modern))
+                                (send dc set-font (make-font #:size H3_FONT_SIZE #:family 'modern #:weight 'semibold))
                                 (loop-rec (cdr recs) (draw-str dc (DETAIL-TITLE-data rec) 0 loop_line H3_HEIGHT))])]
                              [(DETAIL-LINE? rec)
-                              (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern))
+                              (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern #:weight 'semibold))
                               (loop-rec
                                (cdr recs)
                                (draw-lines
@@ -87,7 +87,7 @@
                                 (zip-string (DETAIL-LINE-line rec) (DETAIL-LINE-line_break_length rec))
                                 (DETAIL-LINE-font_size rec)))]
                              [(DETAIL-LIST? rec)
-                              (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern))
+                              (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern #:weight 'semibold))
                               (loop-rec
                                (cdr recs)
                                (draw-rows dc 0 loop_line (DETAIL-LIST-cols_width rec) (DETAIL-LIST-rows rec) (DETAIL-LIST-font_size rec)))]
@@ -107,13 +107,13 @@
   (let ([height
          (cond
           [(eq? font_size 'big)
-           (send dc set-font (make-font #:size BIG_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size BIG_FONT_SIZE #:family 'modern #:weight 'semibold))
            BIG_HEIGHT]
           [(eq? font_size 'small)
-           (send dc set-font (make-font #:size SMALL_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size SMALL_FONT_SIZE #:family 'modern #:weight 'semibold))
            SMALL_HEIGHT]
           [else
-           (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern #:weight 'semibold))
            NORMAL_HEIGHT])])
 
     (let loop ([loop_lines lines]
@@ -126,24 +126,24 @@
   (let ([char_height
          (cond
           [(eq? font_size 'big)
-           (send dc set-font (make-font #:size BIG_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size BIG_FONT_SIZE #:family 'modern #:weight 'semibold))
            BIG_HEIGHT]
           [(eq? font_size 'small)
-           (send dc set-font (make-font #:size SMALL_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size SMALL_FONT_SIZE #:family 'modern #:weight 'semibold))
            SMALL_HEIGHT]
           [else
-           (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern #:weight 'semibold))
            NORMAL_HEIGHT])]
         [char_width
          (cond
           [(eq? font_size 'big)
-           (send dc set-font (make-font #:size BIG_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size BIG_FONT_SIZE #:family 'modern #:weight 'semibold))
            BIG_WIDTH]
           [(eq? font_size 'small)
-           (send dc set-font (make-font #:size SMALL_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size SMALL_FONT_SIZE #:family 'modern #:weight 'semibold))
            SMALL_WIDTH]
           [else
-           (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern))
+           (send dc set-font (make-font #:size NORMAL_FONT_SIZE #:family 'modern #:weight 'semibold))
            NORMAL_WIDTH])])
 
     (let loop-row ([loop_rows rows]
