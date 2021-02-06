@@ -69,6 +69,16 @@
 
      (check-equal?
       (detail
+       #:formats? #f
+       (lambda ()
+         (detail-page
+          (lambda ()
+            (detail-line "haha")
+            "ok"))))
+      "ok")
+
+     (check-equal?
+      (detail
        #:exception_value? "error"
        (lambda ()
          "ok"))
