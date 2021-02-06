@@ -62,6 +62,9 @@
        (lambda ()
          (detail-page
           (lambda ()
+            (detail-h1 "haha")
+            (detail-new-page)
+            (detail-line "haha")
             (detail-list
              (lambda ()
                "ok"))))))

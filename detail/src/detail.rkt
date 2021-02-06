@@ -83,10 +83,12 @@
                                   (detail-line (exn-message e))))
                                (when (*detail*) (detail-report (*detail*)))
                                exception_value)])
-            (proc)))
+                           (proc)
+                           ))
           (lambda ()
             (when (*detail*)
-                  (detail-report (*detail*)))))))
+                  (detail-report (*detail*)))
+            ))))
 
 (define *current_page* (make-parameter #f))
 
@@ -121,7 +123,8 @@
       (proc)))
 
 (define (detail-add-rec rec)
-  (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec)))
+  (when (*detail*)
+        (set-DETAIL-PAGE-recs! (*current_page*) `(,@(DETAIL-PAGE-recs (*current_page*)) ,rec))))
 
 (define (detail-h1 h1)
   (when (*detail*)
