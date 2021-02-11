@@ -32,6 +32,8 @@
            (lambda ()
              (check-equal? (*line_break_length*) 3)
              (check-equal? (*font_size*) 'normal)))
+          
+          (detail-new-page)
 
           (detail-list
            #:line_break_length? 4
