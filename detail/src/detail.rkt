@@ -109,7 +109,8 @@
       (proc)))
 
 (define (detail-new-page)
-  (detail-add-rec (DETAIL-NEW-PAGE)))
+  (when (*detail*)
+    (detail-add-rec (DETAIL-NEW-PAGE))))
 
 (define (detail-div
          proc

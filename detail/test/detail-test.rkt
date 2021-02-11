@@ -62,21 +62,8 @@
        (lambda ()
          (detail-page
           (lambda ()
-            (detail-h1 "haha")
+            (detail-line "haha")
             (detail-new-page)
-            (detail-line "haha")
-            (detail-list
-             (lambda ()
-               "ok"))))))
-      "ok")
-
-     (check-equal?
-      (detail
-       #:formats? #f
-       (lambda ()
-         (detail-page
-          (lambda ()
-            (detail-line "haha")
             "ok"))))
       "ok")
 
