@@ -10,3 +10,5 @@
                "scribble-lib"
                "draw-lib"
                ))
+
+(define test-omit-paths '("info.rkt"))
